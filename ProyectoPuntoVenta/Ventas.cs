@@ -8,6 +8,7 @@ namespace ProyectoPuntoVenta
 {
     public class Ventas 
     {
+        /*
         private String idVenta;
         private List<Producto> productos;
         private List<int> cantidades;
@@ -68,7 +69,7 @@ namespace ProyectoPuntoVenta
             decimal total = subtotal * 1.16m;
             return total;
         }
-
+        */
 
 
     }

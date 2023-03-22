@@ -8,6 +8,7 @@ namespace ProyectoPuntoVenta
 {
     class Vendedor
     {
+        /*
         private String idVendedor;
         private String nombre;
         private String apellido;
@@ -73,7 +74,7 @@ namespace ProyectoPuntoVenta
             this.sueldo = sueldo;
             this.ventas = new List<Ventas>();
         }
-
+        */
        
     }
 }

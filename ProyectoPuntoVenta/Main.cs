@@ -8,30 +8,121 @@ namespace ProyectoPuntoVenta
 {
    public class Principal
     {
-        public static void Main(String[] args) {
+        static void Main(string[] args)
+        {
+            int opt = 0;
 
-            Producto p1 = new Producto("001", "Coca", 20, 100);
-            Producto p2 = new Producto("002", "Agua Natural", 15, 134);
-            Producto p3 = new Producto("002", "Jaztea", 19, 43);
+            while (true)
+            {
+                Console.WriteLine("Seleccione un módulo del Sistema");
+                Console.WriteLine("Cliente (1)");
+                Console.WriteLine("Vendedor (2)");
+                Console.WriteLine("Productos (3)");
+                Console.WriteLine("Ventas (4)");
+                opt = Convert.ToInt32(Console.ReadLine());
+                Console.Clear();
 
-            List<Producto> pv1 = new List<Producto>();
-            pv1.Add(p1);
-            pv1.Add(p2);
-            pv1.Add(p3);
+                switch (opt)
+                {
+                    case 1:
+                        int opt_clt = 0;
+                        while (true)
+                        {
+                            Console.WriteLine("Seleccione una acción para Clientes");
+                            Console.WriteLine("Registrar (1)");
+                            Console.WriteLine("Mostrar Clientes (2)");
+                            Console.WriteLine("Compras Realizadas (3)");
+                            opt_clt = Convert.ToInt32(Console.ReadLine());
+                            Console.Clear();
 
-            List<int> cant = new List<int>();
-            cant.Add(2);
-            cant.Add(1);
-            cant.Add(3);
+                            switch (opt_clt)
+                            {
+                                case 1:
+                                    Console.WriteLine("Aqui hace codigo que registra un cliente");
+                                    break;
+                                case 2:
+                                    Console.WriteLine("Aqui hace codigo que muestra a los clientes");
+                                    break;
+                                case 3:
+                                    Console.WriteLine("Aqui hace codigo que muestra las compras de un cliente");
+                                    break;
+                                default:
+                                    Console.WriteLine("Opción inválida, intente de nuevo.");
+                                    continue;
+                            }
+                            break;
+                        }
+                        break;
+                    case 2:
+                        Console.WriteLine("Entra y muestra las opciones para el modulo Vendedor");
+                        break;
+                    case 3:
+                        int opt_pro = 0;
+                        while (true)
+                        {
+                            Console.WriteLine("Seleccione una acción para Productos");
+                            Console.WriteLine("Agregar (1)");
+                            Console.WriteLine("Mostrar (2)");
+                            Console.WriteLine("Actualizar Precio(3)");
+                            opt_pro = Convert.ToInt32(Console.ReadLine());
+                            Console.Clear();
 
-            DateTime fec = new DateTime(10 / 02 / 2025);
+                            switch (opt_pro)
+                            {
+                                case 1:
+                                    Console.WriteLine("Aqui hace codigo que registra un cliente");
+                                    break;
+                                case 2:
+                                    ConsultasProducto producto = new ConsultasProducto();
 
-            Ventas v1 = new Ventas("001", pv1, cant, fec );
+                                    List<Producto> productos = producto.getProductos("");
 
-            Console.WriteLine(v1.getSubtotal());
-            Console.WriteLine(p1.getCantidadInvent());
-            Console.ReadKey();
+                                    for (int i = 0; i < productos.Count(); i++)
+                                    {
+                                        Console.WriteLine("ID: {0}", productos[i].id_producto);
+                                        Console.WriteLine("Nombre: {0}", productos[i].nombre);
+                                        Console.WriteLine("Precio: ${0}", productos[i].precio);
+                                        Console.WriteLine("Existencia: {0}", productos[i].existencia);
+                                        Console.WriteLine();
+                                    }
 
+                                    break;
+                                case 3:
+
+                                    break;
+                                default:
+                                    Console.WriteLine("Opción inválida, intente de nuevo.");
+                                    continue;
+                            }
+                            break;
+                        }
+                        break;
+                    case 4:
+                        Console.WriteLine("Entra y muestra las opciones para el modulo Ventas");
+                        break;
+                    default:
+                        Console.WriteLine("Opción inválida, intente de nuevo.");
+                        continue;
+                }
+
+                break;
+            }
+
+
+            /*
+                        ConsultasProducto  producto = new ConsultasProducto();
+
+                        List<Producto> productos = producto.getProductos("");
+
+                        for (int i = 0; i < productos.Count(); i++)
+                        {
+                            Console.WriteLine("ID: {0}", productos[i].id_producto);
+                            Console.WriteLine("Nombre: {0}", productos[i].nombre);
+                            Console.WriteLine("Precio: ${0}", productos[i].precio);
+                            Console.WriteLine("Existencia: {0}", productos[i].existencia);
+                            Console.WriteLine();
+                        }
+            */
         }
 
     }
