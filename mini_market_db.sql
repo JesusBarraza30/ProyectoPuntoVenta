@@ -68,4 +68,11 @@ INSERT INTO productos (id_producto, nombre, precio, existencia) VALUES ('18', 'C
 INSERT INTO productos (id_producto, nombre, precio, existencia) VALUES ('19', 'Powerade Ion4, 6 Pack Bebida Para Deportistas Sabor Moras Botella 1 Lt', '118.80', '14');
 INSERT INTO productos (id_producto, nombre, precio, existencia) VALUES ('20', 'La Costeña Chile Jalapeño Rajas', '14', '44');
 
-SELECT * FROM productos
+SELECT * FROM productos;
+
+INSERT INTO vendedores VALUES('1', 'Juan', 'Hernandez', 'Lopez', 'jhl203f@gmail.com', '6674516789');
+
+INSERT INTO clientes VALUES
+('1', 'Maria', 'Velazquez', 'Alvarez', 'marveal@gmail.com', '6674153728'),
+('2', 'Jose', 'García', 'Beltran', 'josgabel@gmail.com', '6674523416'),
+('3', 'Manuel', 'Campos', 'Meza', 'macam@gmail.com', '6673425612');
