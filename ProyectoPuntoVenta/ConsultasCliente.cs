@@ -42,15 +42,14 @@ namespace ProyectoPuntoVenta
 
                 while (reader.Read())
                 {
-                    cliente = new Cliente();
-                    cliente.idCliente = (int)reader["id_cliente"];
-                    cliente.nombre = (string)reader["nombre"];
-                    cliente.ap_pat = (string)reader["ap_pat"];
-                    cliente.ap_mat = (string)reader["ap_mat"];
-                    cliente.email = (string)reader["email"];
-                    cliente.telefono = (string)reader["telefono"];
+                    int idCliente = (int)reader["id_cliente"];
+                    string nombre = (string)reader["nombre"];
+                    string ap_pat = (string)reader["ap_pat"];
+                    string ap_mat = (string)reader["ap_mat"];
+                    string email = (string)reader["email"];
+                    string telefono = (string)reader["telefono"];
 
-
+                    cliente = new Cliente(idCliente, nombre, ap_pat, ap_mat, email, telefono);
                     clientes.Add(cliente);
                 }
 
@@ -72,11 +71,11 @@ namespace ProyectoPuntoVenta
             try
             {
                 MySqlCommand comando = new MySqlCommand(consulta);
-                comando.Parameters.AddWithValue("@nombre", cliente.nombre);
-                comando.Parameters.AddWithValue("@ap_pat", cliente.ap_pat);
-                comando.Parameters.AddWithValue("@ap_mat", cliente.ap_mat);
-                comando.Parameters.AddWithValue("@email", cliente.email);
-                comando.Parameters.AddWithValue("@telefono", cliente.telefono);
+                comando.Parameters.AddWithValue("@nombre", cliente.getNombre());
+                comando.Parameters.AddWithValue("@ap_pat", cliente.getAptPat());
+                comando.Parameters.AddWithValue("@ap_mat", cliente.getAptMat());
+                comando.Parameters.AddWithValue("@email", cliente.getEmail());
+                comando.Parameters.AddWithValue("@telefono", cliente.getTelefono());
                 comando.Connection = ConexionMySql.GetConnection();
                 comando.ExecuteNonQuery();
             }

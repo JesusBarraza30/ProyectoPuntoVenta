@@ -29,9 +29,8 @@ namespace ProyectoPuntoVenta
                 if (filtro != "")
                 {
                     consulta += " WHERE " +
-                        "id LIKE '%" + filtro + "%' OR " +
-                        " nombre LIKE '%" + filtro + "%' OR" +
-                        "precio LIKE '%" + filtro + "%';";
+                        "id_producto LIKE '%" + filtro + "%' OR " +
+                        " nombre LIKE '%" + filtro + "%';";
                 }
 
                 MySqlCommand comando = new MySqlCommand(consulta);
@@ -43,11 +42,55 @@ namespace ProyectoPuntoVenta
 
                 while (reader.Read())
                 {
-                    producto = new Producto();
-                    producto.id_producto = (int)reader["id_producto"];
-                    producto.nombre = (string)reader["nombre"];
-                    producto.precio = (decimal)reader["precio"];
-                    producto.existencia = (int)reader["existencia"];
+                    int id_producto = (int)reader["id_producto"];
+                    string nombre = (string)reader["nombre"];
+                    decimal precio = (decimal)reader["precio"];
+                    int existencia = (int)reader["existencia"];
+
+                    producto = new Producto(id_producto, nombre, precio, existencia);
+                    productos.Add(producto);
+                }
+
+                reader.Close();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            return productos;
+        }
+
+         public List<Producto> getProducto(string filtro)
+        {
+            string consulta = "SELECT * FROM productos";
+
+            MySqlDataReader reader = null;
+
+            try
+            {
+                if (filtro != "")
+                {
+                    consulta += " WHERE " +
+                        "id_producto = " + filtro + ";";
+                }
+
+                MySqlCommand comando = new MySqlCommand(consulta);
+                comando.Connection = ConexionMySql.GetConnection();
+                reader = comando.ExecuteReader();
+
+
+                Producto producto = null;
+
+                while (reader.Read())
+                {
+                    int id_producto = (int)reader["id_producto"];
+                    string nombre = (string)reader["nombre"];
+                    decimal precio = (decimal)reader["precio"];
+                    int existencia = (int)reader["existencia"];
+                    producto = new Producto(id_producto, nombre, precio, existencia);
+
                     productos.Add(producto);
                 }
 
@@ -75,9 +118,9 @@ namespace ProyectoPuntoVenta
             try
             {
                 MySqlCommand comando = new MySqlCommand(consulta);
-                comando.Parameters.AddWithValue("@nombre", producto.nombre);
-                comando.Parameters.AddWithValue("@precio", producto.precio);
-                comando.Parameters.AddWithValue("@existencia", producto.existencia);
+                comando.Parameters.AddWithValue("@nombre", producto.getNombre());
+                comando.Parameters.AddWithValue("@precio", producto.getPrecio());
+                comando.Parameters.AddWithValue("@existencia", producto.getExistencia());
                 comando.Connection = ConexionMySql.GetConnection();
                 comando.ExecuteNonQuery();
             }
