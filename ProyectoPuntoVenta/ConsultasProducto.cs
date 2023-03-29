@@ -88,6 +88,25 @@ namespace ProyectoPuntoVenta
 
 
         }
-        
+
+        public void actualizarPrecioProducto(int id_producto, decimal nuevoPrecio)
+        {
+            string consulta = "UPDATE productos SET precio = @nuevoPrecio WHERE id_producto = @id_producto";
+
+            try
+            {
+                MySqlCommand comando = new MySqlCommand(consulta);
+                comando.Parameters.AddWithValue("@nuevoPrecio", nuevoPrecio);
+                comando.Parameters.AddWithValue("@id_producto", id_producto);
+                comando.Connection = ConexionMySql.GetConnection();
+                comando.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
     }
 }

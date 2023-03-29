@@ -127,7 +127,13 @@ namespace ProyectoPuntoVenta
 
                                     break;
                                 case 3:
+                                    Console.WriteLine("Ingrese el identificador del producto que desea actualizar: ");
+                                    int id_producto = Convert.ToInt32(Console.ReadLine());
+                                    Console.WriteLine("Ingrese el nuevo precio para el producto {0} :", id_producto);
+                                    decimal nuevoPrecio = Convert.ToDecimal(Console.ReadLine());
 
+                                    ConsultasProducto actPrec = new ConsultasProducto();
+                                    actPrec.actualizarPrecioProducto(id_producto, nuevoPrecio);
                                     break;
                                 default:
                                     Console.WriteLine("Opción inválida, intente de nuevo.");
