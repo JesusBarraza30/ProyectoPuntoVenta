@@ -38,10 +38,38 @@ namespace ProyectoPuntoVenta
                             switch (opt_clt)
                             {
                                 case 1:
-                                    Console.WriteLine("Aqui hace codigo que registra un cliente");
+                                    ConsultasCliente consultasClt = new ConsultasCliente();
+
+                                    Console.WriteLine("Ingrese el nombre del cliente: ");
+                                    string nombre = Console.ReadLine();
+                                    Console.WriteLine("Ingrese el apellido paterno del cliente: ");
+                                    string ap_pat = Console.ReadLine();
+                                    Console.WriteLine("Ingrese el apellido materno del cliente: ");
+                                    string ap_mat = Console.ReadLine();
+                                    Console.WriteLine("Ingrese el correo electronico del cliente: ");
+                                    string email = Console.ReadLine();
+                                    Console.WriteLine("Ingrese el telefono celular del cliente: ");
+                                    string telefono = Console.ReadLine();
+
+                                    Cliente nuevoCliente = new Cliente(nombre, ap_pat, ap_mat, email, telefono);
+                                    consultasClt.agregarCliente(nuevoCliente);
+
                                     break;
                                 case 2:
-                                    Console.WriteLine("Aqui hace codigo que muestra a los clientes");
+                                    ConsultasCliente cliente = new ConsultasCliente();
+
+                                    List<Cliente> clientes = cliente.getClientes("");
+
+                                    for (int i = 0; i < clientes.Count(); i++)
+                                    {
+                                        Console.WriteLine("ID: {0}", clientes[i].idCliente);
+                                        Console.WriteLine("Nombre: {0}", clientes[i].nombre);
+                                        Console.WriteLine("Apellido Paterno: {0}", clientes[i].ap_pat);
+                                        Console.WriteLine("Apellido Materno: {0}", clientes[i].ap_mat);
+                                        Console.WriteLine("Correo electronico: {0}", clientes[i].email);
+                                        Console.WriteLine("Apellido telefono: {0}", clientes[i].telefono);
+                                        Console.WriteLine();
+                                    }
                                     break;
                                 case 3:
                                     Console.WriteLine("Aqui hace codigo que muestra las compras de un cliente");

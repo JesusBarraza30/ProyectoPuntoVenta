@@ -43,7 +43,7 @@ namespace ProyectoPuntoVenta
                 while (reader.Read())
                 {
                     cliente = new Cliente();
-                    cliente.idCliente = (string)reader["id_cliente"];
+                    cliente.idCliente = (int)reader["id_cliente"];
                     cliente.nombre = (string)reader["nombre"];
                     cliente.ap_pat = (string)reader["ap_pat"];
                     cliente.ap_mat = (string)reader["ap_mat"];
@@ -67,7 +67,7 @@ namespace ProyectoPuntoVenta
         public void agregarCliente(Cliente cliente)
         {
             string consulta = "INSERT INTO clientes (nombre, ap_pat, ap_mat, email, telefono) " +
-                              "VALUES (@nombre, @ap_pat @ap_mat, @email, @telefono)";
+                              "VALUES (@nombre, @ap_pat, @ap_mat, @email, @telefono)";
 
             try
             {

@@ -8,7 +8,7 @@ namespace ProyectoPuntoVenta
 {
     public class Cliente
     {
-        public string idCliente;
+        public int idCliente;
         public string nombre;
         public string ap_pat;
         public string ap_mat;
