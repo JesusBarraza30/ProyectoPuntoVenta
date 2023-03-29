@@ -13,7 +13,7 @@ namespace ProyectoPuntoVenta
 
         public MySqlConnection GetConnection()
         {
-            string connectionString = "server=localhost;database=mini_market_db;uid=root;pwd=SantaMaria123;";
+            string connectionString = "server=localhost;database=mini_market_db;uid=root;pwd=Albertobc24;";
             MySqlConnection connection = new MySqlConnection(connectionString);
 
             try

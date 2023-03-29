@@ -8,67 +8,24 @@ namespace ProyectoPuntoVenta
 {
     public class Cliente
     {
-        private String idCliente;
-        private String nombre;
-        private String apellido;
-        private List<Ventas> compras;
+        public string idCliente;
+        public string nombre;
+        public string ap_pat;
+        public string ap_mat;
+        public string email;
+        public string telefono;
 
-
-        //metodos get y set para el id del cliente
-        public String getIdCliente()
-        {
-            return idCliente;
+        public Cliente() { 
+            
         }
 
-        public void setIdCliente(String idCliente)
-        {
-            this.idCliente = idCliente;
-        }
-
-        // metodos get y set para el nombre del cliente
-        public String getNombre()
-        {
-            return nombre;
-        }
-
-        public void setNombre(String nombre)
-        {
+        public Cliente(string nombre, string ap_pat, string ap_mat, string email, string telefono) {
             this.nombre = nombre;
+            this.ap_pat = ap_pat;
+            this.ap_mat = ap_mat;
+            this.email = email;
+            this.telefono = telefono;
         }
-
-        // metodos get y set para el apellido del cliente
-        public String getApellido()
-        {
-            return apellido;
-        }
-
-        public void setApellido(String apellido)
-        {
-            this.apellido = apellido;
-        }
-
-
-
-        //Constructor por defecto
-        public Cliente() {
-        
-        }
-
-
-
-        //Constructor con todos los atributos
-        public Cliente(String idCliente, String nombre, String apellido ,List<Ventas> compras)
-        {
-            this.idCliente = idCliente;
-            this.nombre = nombre;
-            this.apellido = apellido;
-            this.compras = new List<Ventas>();
-        }
-
-
-
-
-
 
     }
 }

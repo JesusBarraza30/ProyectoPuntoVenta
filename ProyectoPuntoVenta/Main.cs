@@ -70,7 +70,18 @@ namespace ProyectoPuntoVenta
                             switch (opt_pro)
                             {
                                 case 1:
-                                    Console.WriteLine("Aqui hace codigo que registra un cliente");
+                                    ConsultasProducto consultas = new ConsultasProducto();
+
+                                    Console.WriteLine("Ingrese el nombre del producto: ");
+                                    string nombre = Console.ReadLine();
+                                    Console.WriteLine("Ingrese el precio del producto: ");
+                                    decimal precio = Convert.ToDecimal(Console.ReadLine());
+                                    Console.WriteLine("Ingrese la cantidad en existencia del producto: ");
+                                    int existencia = Convert.ToInt32(Console.ReadLine());
+
+                                    Producto productoNuevo = new Producto(nombre, precio, existencia);
+                                    consultas.agregarProductos(productoNuevo);
+
                                     break;
                                 case 2:
                                     ConsultasProducto producto = new ConsultasProducto();

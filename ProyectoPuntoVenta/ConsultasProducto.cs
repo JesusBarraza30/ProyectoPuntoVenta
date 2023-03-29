@@ -61,5 +61,33 @@ namespace ProyectoPuntoVenta
 
             return productos;
         }
+
+
+        
+        
+        public void agregarProductos(Producto producto)
+        {
+            string consulta = "INSERT INTO productos (nombre, precio, existencia)" +
+                                "VALUES (@nombre, @precio, @existencia)";
+
+            
+
+            try
+            {
+                MySqlCommand comando = new MySqlCommand(consulta);
+                comando.Parameters.AddWithValue("@nombre", producto.nombre);
+                comando.Parameters.AddWithValue("@precio", producto.precio);
+                comando.Parameters.AddWithValue("@existencia", producto.existencia);
+                comando.Connection = ConexionMySql.GetConnection();
+                comando.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+
+        }
+        
     }
 }
