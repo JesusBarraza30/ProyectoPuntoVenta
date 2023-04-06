@@ -13,6 +13,8 @@ namespace ProyectoPuntoVenta
         private string nombre;
         private decimal precio;
         private int existencia;
+        private int cantidad;
+        private decimal total;
         private ConsultasProducto consultas = new ConsultasProducto();
 
         public Producto() {
@@ -26,11 +28,25 @@ namespace ProyectoPuntoVenta
             this.existencia = existencia;
         }
 
+        public Producto(int id_producto, string nombre, int cantidad, decimal total)
+        {
+            this.id_producto = id_producto;
+            this.nombre = nombre;
+            this.cantidad = cantidad;
+            this.total = total;
+        }
+
+
         public Producto(string nombre, decimal precio, int existencia)
         {
             this.nombre = nombre;
             this.precio = precio;
             this.existencia = existencia;
+        }
+
+        public int getId()
+        {
+            return id_producto;
         }
 
         public string getNombre()
@@ -48,6 +64,21 @@ namespace ProyectoPuntoVenta
             return existencia;
         }
 
+        public int getCantidad()
+        {
+            return cantidad;
+        }
+
+        public decimal getTotal()
+        {
+            return total;
+        }
+
+        public void setExistencia(int existencia)
+        {
+            this.existencia = existencia;
+            consultas.actualizarExistencia(id_producto, existencia);
+        }
         public void mostrarOpciones()
         {
             while (true)

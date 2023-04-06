@@ -20,7 +20,7 @@ namespace ProyectoPuntoVenta
 
         public List<Producto> getProductos(string filtro)
         {
-            string consulta = "SELECT * FROM productos";
+            string consulta = "SELECT * FROM productos WHERE existencia > 0";
 
             MySqlDataReader reader = null;
 
@@ -28,7 +28,7 @@ namespace ProyectoPuntoVenta
             {
                 if (filtro != "")
                 {
-                    consulta += " WHERE " +
+                    consulta += " WHERE existencia > 0 AND " +
                         "id_producto LIKE '%" + filtro + "%' OR " +
                         " nombre LIKE '%" + filtro + "%';";
                 }
@@ -150,6 +150,22 @@ namespace ProyectoPuntoVenta
             }
         }
 
+        public void actualizarExistencia(int id_producto, int nuevaExistencia)
+        {
+            string consulta = "UPDATE productos SET existencia = @nuevaExistencia WHERE id_producto = @id_producto";
 
+            try
+            {
+                MySqlCommand comando = new MySqlCommand(consulta);
+                comando.Parameters.AddWithValue("@nuevaExistencia", nuevaExistencia);
+                comando.Parameters.AddWithValue("@id_producto", id_producto);
+                comando.Connection = ConexionMySql.GetConnection();
+                comando.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

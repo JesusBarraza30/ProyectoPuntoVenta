@@ -7,20 +7,20 @@ using MySql.Data.MySqlClient;
 
 namespace ProyectoPuntoVenta
 {
-    internal class ConsultasCliente
+    internal class ConsultasVendedor
     {
         private BD ConexionMySql;
-        private List<Cliente> clientes;
+        private List<Vendedor> vendedores;
 
-        public ConsultasCliente()
+        public ConsultasVendedor()
         {
             ConexionMySql = new BD();
-            clientes = new List<Cliente>();
+            vendedores = new List<Vendedor>();
         }
 
-        public List<Cliente> getClientes(string filtro)
+        public List<Vendedor> getVendedores(string filtro)
         {
-            string consulta = "SELECT * FROM clientes";
+            string consulta = "SELECT * FROM vendedores";
 
             MySqlDataReader reader = null;
 
@@ -38,19 +38,21 @@ namespace ProyectoPuntoVenta
                 reader = comando.ExecuteReader();
 
 
-                Cliente cliente = null;
+                Vendedor vendedor = null;
 
                 while (reader.Read())
                 {
-                    int idCliente = (int)reader["id_cliente"];
+                    int idCliente = (int)reader["id_vendedor"];
                     string nombre = (string)reader["nombre"];
                     string ap_pat = (string)reader["ap_pat"];
                     string ap_mat = (string)reader["ap_mat"];
                     string email = (string)reader["email"];
                     string telefono = (string)reader["telefono"];
+                    decimal sueldoBase = (decimal)reader["sueldo_base"];
+                    int comision = (int)reader["comision"];
 
-                    cliente = new Cliente(idCliente, nombre, ap_pat, ap_mat, email, telefono);
-                    clientes.Add(cliente);
+                    vendedor = new Vendedor(idCliente, nombre, ap_pat, ap_mat, email, telefono, comision, sueldoBase);
+                    vendedores.Add(vendedor);
                 }
 
                 reader.Close();
@@ -60,52 +62,14 @@ namespace ProyectoPuntoVenta
                 throw;
             }
 
-            return clientes;
+            return vendedores;
         }
 
-        public List<Cliente> getCliente(string id)
-        {
-            string consulta = "SELECT * FROM clientes WHERE id_cliente = " + id;
-
-            MySqlDataReader reader = null;
-
-            try
-            {
-                MySqlCommand comando = new MySqlCommand(consulta);
-                comando.Connection = ConexionMySql.GetConnection();
-                reader = comando.ExecuteReader();
-
-
-                Cliente cliente = null;
-
-                while (reader.Read())
-                {
-                    int idCliente = (int)reader["id_cliente"];
-                    string nombre = (string)reader["nombre"];
-                    string ap_pat = (string)reader["ap_pat"];
-                    string ap_mat = (string)reader["ap_mat"];
-                    string email = (string)reader["email"];
-                    string telefono = (string)reader["telefono"];
-
-                    cliente = new Cliente(idCliente, nombre, ap_pat, ap_mat, email, telefono);
-                    clientes.Add(cliente);
-                }
-
-                reader.Close();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
-            return clientes;
-        }
-
-        public bool clienteExistente(string nombre, string ap_pat, string ap_mat)
+        public bool vendedorExistente(string nombre, string ap_pat, string ap_mat)
         {
 
             bool verificar;
-            string consulta = "SELECT * FROM clientes";
+            string consulta = "SELECT * FROM vendedores";
 
             MySqlDataReader reader = null;
 
@@ -140,19 +104,21 @@ namespace ProyectoPuntoVenta
             return verificar;
         }
 
-        public void agregarCliente(Cliente cliente)
+        public void agregarVendedor(Vendedor vendedor)
         {
-            string consulta = "INSERT INTO clientes (nombre, ap_pat, ap_mat, email, telefono) " +
-                              "VALUES (@nombre, @ap_pat, @ap_mat, @email, @telefono)";
+            string consulta = "INSERT INTO vendedores (nombre, ap_pat, ap_mat, email, telefono, sueldo_base, comision) " +
+                              "VALUES (@nombre, @ap_pat, @ap_mat, @email, @telefono, @sueldoBase, @comision)";
 
             try
             {
                 MySqlCommand comando = new MySqlCommand(consulta);
-                comando.Parameters.AddWithValue("@nombre", cliente.getNombre());
-                comando.Parameters.AddWithValue("@ap_pat", cliente.getAptPat());
-                comando.Parameters.AddWithValue("@ap_mat", cliente.getAptMat());
-                comando.Parameters.AddWithValue("@email", cliente.getEmail());
-                comando.Parameters.AddWithValue("@telefono", cliente.getTelefono());
+                comando.Parameters.AddWithValue("@nombre", vendedor.getNombre());
+                comando.Parameters.AddWithValue("@ap_pat", vendedor.getAptPat());
+                comando.Parameters.AddWithValue("@ap_mat", vendedor.getAptMat());
+                comando.Parameters.AddWithValue("@email", vendedor.getEmail());
+                comando.Parameters.AddWithValue("@telefono", vendedor.getTelefono());
+                comando.Parameters.AddWithValue("@sueldoBase", vendedor.getSueldoBase());
+                comando.Parameters.AddWithValue("@comision", vendedor.getComision());
                 comando.Connection = ConexionMySql.GetConnection();
                 comando.ExecuteNonQuery();
             }
@@ -161,5 +127,6 @@ namespace ProyectoPuntoVenta
                 throw;
             }
         }
+
     }
 }

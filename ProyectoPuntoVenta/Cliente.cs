@@ -8,13 +8,13 @@ namespace ProyectoPuntoVenta
 {
     public class Cliente
     {
-        private int idCliente;
-        private string nombre;
-        private string ap_pat;
-        private string ap_mat;
-        private string email;
-        private string telefono;
-        private int optSelect;
+        protected int idCliente;
+        protected string nombre;
+        protected string ap_pat;
+        protected string ap_mat;
+        protected string email;
+        protected string telefono;
+        protected int optSelect;
 
         public Cliente() { 
             
@@ -37,6 +37,11 @@ namespace ProyectoPuntoVenta
             this.ap_mat = ap_mat;
             this.email = email;
             this.telefono = telefono;
+        }
+
+        public int getId()
+        {
+            return idCliente;
         }
 
         public string getNombre()
@@ -91,23 +96,46 @@ namespace ProyectoPuntoVenta
 
         public void agregarCliente()
         {
-            ConsultasProducto consultas = new ConsultasProducto();
+            bool cliente_existe;
 
-            Console.WriteLine("Ingrese el nombre del producto: ");
-            string nombre = Console.ReadLine();
-            Console.WriteLine("Ingrese el precio del producto: ");
-            decimal precio = Convert.ToDecimal(Console.ReadLine());
-            Console.WriteLine("Ingrese la cantidad en existencia del producto: ");
-            int existencia = Convert.ToInt32(Console.ReadLine());
+            do
+            {
+                ConsultasCliente consultasClt = new ConsultasCliente();
 
-            Producto productoNuevo = new Producto(nombre, precio, existencia);
+                Console.WriteLine("Ingrese el nombre del cliente: ");
+                string nombre = Console.ReadLine();
+                Console.WriteLine("Ingrese el apellido paterno del cliente: ");
+                string ap_pat = Console.ReadLine();
+                Console.WriteLine("Ingrese el apellido materno del cliente: ");
+                string ap_mat = Console.ReadLine();
 
-            consultas.agregarProductos(productoNuevo);
+                cliente_existe = consultasClt.clienteExistente(nombre, ap_pat, ap_mat);
 
-            Console.WriteLine("Si desea volver al menú anterior presione cualquier tecla");
-            Console.ReadKey();
-            Console.Clear();
-            mostrarOpciones();
+                if (cliente_existe)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Este cliente ya se encuentra registrado, por favor teclee cualquier tecla e ingrese otros datos");
+                    Console.ReadKey();
+                    Console.Clear();
+                }
+                else
+                {
+                    Console.WriteLine("Ingrese el correo electrónico del cliente: ");
+                    string email = Console.ReadLine();
+
+                    Console.WriteLine("Ingrese el teléfono celular del cliente: ");
+                    string telefono = Console.ReadLine();
+
+                    Cliente nuevoCliente = new Cliente(nombre, ap_pat, ap_mat, email, telefono);
+                    consultasClt.agregarCliente(nuevoCliente);
+
+                    Console.WriteLine("Si desea volver al menú anterior presione cualquier tecla");
+                    Console.ReadKey();
+                    Console.Clear();
+                    mostrarOpciones();
+                }
+
+            } while (cliente_existe);
         }
 
         public void mostrarClientes()
