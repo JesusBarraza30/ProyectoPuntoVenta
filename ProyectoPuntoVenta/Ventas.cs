@@ -41,6 +41,14 @@ namespace ProyectoPuntoVenta
             this.fechaVenta = fechaVenta;
         }
 
+        public Ventas(int idCliente, int idVendedor, decimal subtotal, decimal total)
+        {
+            this.idCliente = idCliente;
+            this.idVendedor = idVendedor;
+            this.subtotal = subtotal;
+            this.total = total;
+        }
+
         public int getIdCliente()
         {
             return idCliente;
@@ -79,7 +87,7 @@ namespace ProyectoPuntoVenta
                         registrarVenta();
                         break;
                     case 2:
-                        //mostrarVentas();
+                        mostrarVentas();
                         break;
                     case 3:
                         return;
@@ -220,7 +228,7 @@ namespace ProyectoPuntoVenta
 
             if (vendedorSeleccionado == null)
             {
-                Console.WriteLine("El ID de cliente ingresado no es válido.");
+                Console.WriteLine("El ID de vendedor ingresado no es válido.");
                 return;
             }
 
@@ -252,6 +260,33 @@ namespace ProyectoPuntoVenta
             Console.WriteLine(total);
             Console.ReadKey();
             Console.Clear();
+
+            Ventas nuevaVenta = new Ventas(idCliente, idVendedor, subtotal, total);
+            consultaVentas.agregarVentas(nuevaVenta);
+        }
+
+        public void mostrarVentas()
+        {
+            ConsultaVentas consultas = new ConsultaVentas();
+            List<Ventas> ventas = consultas.getVentas("");
+
+            foreach (Ventas item in ventas)
+            {
+                Console.WriteLine("ID venta: {0}", item.idVenta);
+                Console.WriteLine("ID Cliente: {0}", item.idCliente);
+                Console.WriteLine("ID Vendedor: {0}", item.idVendedor);
+                Console.WriteLine("Fecha: {0}", item.fechaVenta);
+                Console.WriteLine("Subtotal: {0}", item.subtotal);
+                Console.WriteLine("Total: {0}", item.total);
+
+
+                Console.WriteLine();
+            }
+
+            Console.WriteLine("Si desea volver al menú anterior presione cualquier tecla");
+            Console.ReadKey();
+            Console.Clear();
+            mostrarOpciones();
         }
     }
     

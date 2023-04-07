@@ -82,5 +82,50 @@ namespace ProyectoPuntoVenta
             }
         }
 
+        public List<Ventas> getVentas(string filtro)
+        {
+            string consulta = "SELECT * FROM ventas";
+
+            MySqlDataReader reader = null;
+
+            try
+            {
+                if (filtro != "")
+                {
+                    consulta += " WHERE " +
+                        "id_venta LIKE '%" + filtro + "%' OR " +
+                        " id_cliente LIKE '%" + filtro + "%' ;";
+                }
+
+                MySqlCommand comando = new MySqlCommand(consulta);
+                comando.Connection = ConexionMySql.GetConnection();
+                reader = comando.ExecuteReader();
+
+
+                Ventas ventan = null;
+
+                while (reader.Read())
+                {
+                    int id_venta = (int)reader["id_venta"];
+                    int id_cliente = (int)reader["id_cliente"];
+                    int id_vendedor = (int)reader["id_vendedor"];
+                    DateTime fecha_venta = (DateTime)reader["fecha_venta"];
+                    decimal subtotal = (decimal)reader["subtotal"];
+                    decimal total = (decimal)reader["total"];
+
+                    ventan = new Ventas(id_venta, id_cliente, id_vendedor, fecha_venta, subtotal, total);
+                    venta.Add(ventan);
+                }
+
+                reader.Close();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return venta;
+        }
+
     }
 }
