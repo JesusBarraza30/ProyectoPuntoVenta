@@ -265,6 +265,8 @@ namespace ProyectoPuntoVenta
             consultaVentas.agregarVentas(nuevaVenta);
         }
 
+
+
         public void mostrarVentas()
         {
             ConsultaVentas consultas = new ConsultaVentas();
