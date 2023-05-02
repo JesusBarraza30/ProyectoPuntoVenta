@@ -21,6 +21,8 @@ CREATE TABLE vendedores (
   ap_mat VARCHAR(20) NOT NULL,
   email VARCHAR(50) NOT NULL,
   telefono VARCHAR(20) NOT NULL,
+  comision INT NOT NULL,
+  sueldo_base DECIMAL NOT NULL,
   PRIMARY KEY (id_vendedor)
 );
 
@@ -33,7 +35,7 @@ CREATE TABLE productos (
 );
 
 CREATE TABLE ventas (
-  id_venta INT PRIMARY KEY,
+  id_venta INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
   id_cliente INT,
   id_vendedor INT,
   id_producto INT,
@@ -44,6 +46,14 @@ CREATE TABLE ventas (
   FOREIGN KEY (id_cliente) REFERENCES clientes(id_cliente),
   FOREIGN KEY (id_vendedor) REFERENCES vendedores(id_vendedor),
   FOREIGN KEY (id_producto) REFERENCES productos(id_producto)
+);
+
+CREATE TABLE detalle_ventas(
+	id_producto INT,
+    id_venta INT,
+	cantidad INT,
+    FOREIGN KEY (id_producto) REFERENCES productos(id_producto),
+    FOREIGN KEY (id_venta) REFERENCES ventas(id_venta)
 );
 
 
@@ -68,9 +78,10 @@ INSERT INTO productos (id_producto, nombre, precio, existencia) VALUES ('18', 'C
 INSERT INTO productos (id_producto, nombre, precio, existencia) VALUES ('19', 'Powerade Ion4, 6 Pack Bebida Para Deportistas Sabor Moras Botella 1 Lt', '118.80', '14');
 INSERT INTO productos (id_producto, nombre, precio, existencia) VALUES ('20', 'La Costeña Chile Jalapeño Rajas', '14', '44');
 
-SELECT * FROM productos;
+SELECT * FROM ventas;
 
-INSERT INTO vendedores VALUES('1', 'Juan', 'Hernandez', 'Lopez', 'jhl203f@gmail.com', '6674516789');
+INSERT INTO vendedores VALUES
+('1', 'jesus', 'barraza', 'castro', 'asfas@gmail.com', '6674153728', 5, 2000);
 
 INSERT INTO clientes VALUES
 ('1', 'Maria', 'Velazquez', 'Alvarez', 'marveal@gmail.com', '6674153728'),
