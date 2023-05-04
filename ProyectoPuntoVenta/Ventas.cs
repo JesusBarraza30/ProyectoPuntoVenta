@@ -12,6 +12,8 @@ namespace ProyectoPuntoVenta
         private int idVenta;
         private int idCliente;
         private int idVendedor;
+        private int idProducto;
+        private int cantidad;
         private decimal subtotal;
         private decimal total;
         private int optSelect;
@@ -31,11 +33,12 @@ namespace ProyectoPuntoVenta
             this.total = total;
         }
 
-        public Ventas(int idVenta, int idCliente, int idVendedor, DateTime fechaVenta, decimal subtotal, decimal total)
+        public Ventas(int idCliente, int idVendedor, int idProducto, int cantidad,  decimal subtotal, decimal total, DateTime fechaVenta)
         {
-            this.idVenta = idVenta;
             this.idCliente = idCliente;
             this.idVendedor = idVendedor;
+            this.idProducto = idProducto;
+            this.cantidad = cantidad;
             this.subtotal = subtotal;
             this.total = total;
             this.fechaVenta = fechaVenta;
@@ -58,6 +61,15 @@ namespace ProyectoPuntoVenta
             return idVendedor;
         }
 
+        public int getIdProd()
+        {
+            return idProducto;
+        }
+
+        public int getCantidad() 
+        {
+            return cantidad;
+        }
         public decimal getSubTotalVenta()
         {
             return subtotal;
@@ -87,7 +99,7 @@ namespace ProyectoPuntoVenta
                         registrarVenta();
                         break;
                     case 2:
-                        mostrarVentas();
+                       // mostrarVentas();
                         break;
                     case 3:
                         return;
@@ -267,7 +279,7 @@ namespace ProyectoPuntoVenta
 
 
 
-        public void mostrarVentas()
+       /* public void mostrarVentas()
         {
             ConsultaVentas consultas = new ConsultaVentas();
             List<Ventas> ventas = consultas.getVentas("");
@@ -289,7 +301,7 @@ namespace ProyectoPuntoVenta
             Console.ReadKey();
             Console.Clear();
             mostrarOpciones();
-        }
+        }*/
     }
     
 }

@@ -19,16 +19,18 @@ namespace ProyectoPuntoVenta
 
         public void agregarVentas(Ventas venta)
         {
-            string consulta = "INSERT INTO ventas (id_cliente, id_vendedor, fecha_venta, subtotal, total)" +
-                                "VALUES (@id_cliente, @id_vendedor, @fecha, @subtotal, @total)";
+            string consulta = "INSERT INTO ventas (id_cliente, id_vendedor, id_producto, cantidad_producto,  subtotal, total, fecha_venta)" +
+                                "VALUES (@id_cliente, @id_vendedor, @id_producto, @cantidad_producto, @subtotal, @total, @fecha)";
             try
             {
                 MySqlCommand comando = new MySqlCommand(consulta);
                 comando.Parameters.AddWithValue("@id_cliente", venta.getIdCliente());
                 comando.Parameters.AddWithValue("@id_vendedor", venta.getIdVendedor());
-                comando.Parameters.AddWithValue("@fecha", DateTime.Now);
+                comando.Parameters.AddWithValue("@id_producto", venta.getIdProd());
+                comando.Parameters.AddWithValue("@cantidad_producto", venta.getCantidad());
                 comando.Parameters.AddWithValue("@subtotal", venta.getSubTotalVenta());
                 comando.Parameters.AddWithValue("@total", venta.getTotalVenta());
+                comando.Parameters.AddWithValue("@fecha", DateTime.Now);
                 comando.Connection = ConexionMySql.GetConnection();
                 comando.ExecuteNonQuery();
             }
@@ -82,7 +84,7 @@ namespace ProyectoPuntoVenta
             }
         }
 
-        public List<Ventas> getVentas(string filtro)
+      /*  public List<Ventas> getVentas(string filtro)
         {
             string consulta = "SELECT * FROM ventas";
 
@@ -125,7 +127,7 @@ namespace ProyectoPuntoVenta
             }
 
             return venta;
-        }
+        }*/
 
     }
 }
