@@ -50,20 +50,10 @@ namespace ProyectoPuntoVenta
         {
             gpbx_mostrar.Show();
 
-            MySqlConnection con = new MySqlConnection("server=localhost;database=mini_market_db;uid=root;pwd=Albertobc24;");
+            ConsultasCliente consultas = new ConsultasCliente();
+            List<Cliente> listaClientes = consultas.getClientes("");
 
-            string query = "select * from clientes";
-
-            using (MySqlDataAdapter adpt = new MySqlDataAdapter(query, con))
-            {
-
-                DataSet dset = new DataSet();
-
-                adpt.Fill(dset);
-
-                dataGridView1.DataSource = dset.Tables[0];
-
-            }
+            dataGridView1.DataSource = listaClientes;
 
             gpbx_registrar.Hide();
         }
@@ -73,27 +63,9 @@ namespace ProyectoPuntoVenta
             if (rdbtn_agregar_cliente.Checked) {
                 gpbx_registrar.Show();
                 gpbx_mostrar.Hide();
+
             }
-            if (rdbtn_mostrar_clientes.Checked) {
-                gpbx_mostrar.Show();
-                gpbx_registrar.Hide();
-
-                MySqlConnection con = new MySqlConnection("server=localhost;database=mini_market_db;uid=root;pwd=Albertobc24;");
-
-                string query = "select * from clientes";
-
-                using (MySqlDataAdapter adpt = new MySqlDataAdapter(query, con))
-                {
-
-                    DataSet dset = new DataSet();
-
-                    adpt.Fill(dset);
-
-                    dataGridView1.DataSource = dset.Tables[0];
-
-                }
-                
-            }
+           
         }
 
         private void panel_vendedor_Paint(object sender, PaintEventArgs e)
@@ -358,7 +330,6 @@ namespace ProyectoPuntoVenta
                 {
 
                     Cliente nuevoCliente = new Cliente(txt_nombre.Text, txt_ap_pat.Text, txt_ap_mat.Text, txt_correo.Text, txt_telefono.Text);
-
                     consultasClt.agregarCliente(nuevoCliente);
                     MessageBox.Show("Cliente registrado con exito");
                 }

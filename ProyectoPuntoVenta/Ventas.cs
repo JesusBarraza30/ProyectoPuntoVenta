@@ -208,13 +208,13 @@ namespace ProyectoPuntoVenta
             List<Cliente> clientesDisponibles = consultasCliente.getClientes("");
             foreach (Cliente item in clientesDisponibles)
             {
-                Console.WriteLine("{0} - {1} {2} {3}", item.getId(), item.getNombre(), item.getAptPat(), item.getAptMat());
+                Console.WriteLine("{0} - {1} {2} {3}", item.IdCliente, item.Nombre, item.ApellidoPaterno, item.ApellidoMaterno);
             }
 
             Console.Write("Seleccione el ID del cliente que está realizando la compra: ");
             int idCliente = int.Parse(Console.ReadLine());
 
-            Cliente clienteSeleccionado = clientesDisponibles.Find(c => c.getId() == idCliente);
+            Cliente clienteSeleccionado = clientesDisponibles.Find(c => c.IdCliente == idCliente);
 
             if (clienteSeleccionado == null)
             {
@@ -230,13 +230,13 @@ namespace ProyectoPuntoVenta
             List<Vendedor> vendedoresDisponibles = consultasVendedor.getVendedores("");
             foreach (Vendedor item in vendedoresDisponibles)
             {
-                Console.WriteLine("{0} - {1} {2} {3}", item.getId(), item.getNombre(), item.getAptPat(), item.getAptMat());
+                Console.WriteLine("{0} - {1} {2} {3}", item.IdCliente, item.Nombre, item.ApellidoPaterno, item.ApellidoMaterno);
             }
 
             Console.Write("Seleccione el ID del vendedor que está realizando la venta: ");
             int idVendedor = int.Parse(Console.ReadLine());
 
-            Vendedor vendedorSeleccionado = vendedoresDisponibles.Find(v => v.getId() == idVendedor);
+            Vendedor vendedorSeleccionado = vendedoresDisponibles.Find(v => v.IdCliente == idVendedor);
 
             if (vendedorSeleccionado == null)
             {
@@ -247,9 +247,9 @@ namespace ProyectoPuntoVenta
             Console.Clear();
             Console.WriteLine("Resumen de venta");
             Console.WriteLine("-----Cliente-----");
-            Console.WriteLine("{0} - {1} {2} {3}", clienteSeleccionado.getId(), clienteSeleccionado.getNombre(), clienteSeleccionado.getAptPat(), clienteSeleccionado.getAptMat());
+            Console.WriteLine("{0} - {1} {2} {3}", clienteSeleccionado.IdCliente, clienteSeleccionado.Nombre, clienteSeleccionado.ApellidoPaterno, clienteSeleccionado.ApellidoMaterno);
             Console.WriteLine("-----Vendedor-----");
-            Console.WriteLine("{0} - {1} {2} {3}", vendedorSeleccionado.getId(), vendedorSeleccionado.getNombre(), vendedorSeleccionado.getAptPat(), vendedorSeleccionado.getAptMat());
+            Console.WriteLine("{0} - {1} {2} {3}", vendedorSeleccionado.IdCliente, vendedorSeleccionado.Nombre, vendedorSeleccionado.ApellidoPaterno, vendedorSeleccionado.ApellidoMaterno);
             Console.WriteLine("-----Productos-----");
             foreach (Producto item in carrito)
             {

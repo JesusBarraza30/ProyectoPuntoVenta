@@ -148,11 +148,11 @@ namespace ProyectoPuntoVenta
             try
             {
                 MySqlCommand comando = new MySqlCommand(consulta);
-                comando.Parameters.AddWithValue("@nombre", cliente.getNombre());
-                comando.Parameters.AddWithValue("@ap_pat", cliente.getAptPat());
-                comando.Parameters.AddWithValue("@ap_mat", cliente.getAptMat());
-                comando.Parameters.AddWithValue("@email", cliente.getEmail());
-                comando.Parameters.AddWithValue("@telefono", cliente.getTelefono());
+                comando.Parameters.AddWithValue("@nombre", cliente.Nombre);
+                comando.Parameters.AddWithValue("@ap_pat", cliente.ApellidoMaterno);
+                comando.Parameters.AddWithValue("@ap_mat", cliente.ApellidoPaterno);
+                comando.Parameters.AddWithValue("@email", cliente.Email);
+                comando.Parameters.AddWithValue("@telefono", cliente.Telefono);
                 comando.Connection = ConexionMySql.GetConnection();
                 comando.ExecuteNonQuery();
             }

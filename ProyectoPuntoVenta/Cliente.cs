@@ -20,50 +20,31 @@ namespace ProyectoPuntoVenta
             
         }
 
-        public Cliente(int idCliente ,string nombre, string ap_pat, string ap_mat, string email, string telefono)
+        public Cliente(int idCliente, string nombre, string apellidoPaterno, string apellidoMaterno, string email, string telefono)
         {
-            this.idCliente = idCliente;
-            this.nombre = nombre;
-            this.ap_pat = ap_pat;
-            this.ap_mat = ap_mat;
-            this.email = email;
-            this.telefono = telefono;
+            IdCliente = idCliente;
+            Nombre = nombre;
+            ApellidoPaterno = apellidoPaterno;
+            ApellidoMaterno = apellidoMaterno;
+            Email = email;
+            Telefono = telefono;
         }
 
         public Cliente(string nombre, string ap_pat, string ap_mat, string email, string telefono)
         {
-            this.nombre = nombre;
-            this.ap_pat = ap_pat;
-            this.ap_mat = ap_mat;
-            this.email = email;
-            this.telefono = telefono;
+            Nombre = nombre;
+            ApellidoPaterno = ap_pat;
+            ApellidoMaterno = ap_mat;
+            Email = email;
+            Telefono = telefono;
         }
 
-        public int getId()
-        {
-            return idCliente;
-        }
-
-        public string getNombre()
-        {
-            return nombre;
-        }
-        public string getAptPat()
-        {
-            return ap_pat;
-        }
-        public string getAptMat()
-        {
-            return ap_mat;
-        }
-        public string getEmail()
-        {
-            return email;
-        }
-        public string getTelefono()
-        {
-            return telefono;
-        }
+        public int IdCliente { get; set; }
+        public string Nombre { get; set; }
+        public string ApellidoPaterno { get; set; }
+        public string ApellidoMaterno { get; set; }
+        public string Email { get; set; }
+        public string Telefono { get; set; }
 
         public void mostrarOpciones()
         {
