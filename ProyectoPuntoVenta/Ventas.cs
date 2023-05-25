@@ -136,12 +136,12 @@ namespace ProyectoPuntoVenta
                 Console.WriteLine("Lista de productos disponibles:");
                 foreach (Producto item in productoStock)
                 {
-                    if(item.getExistencia() > 0)
+                    if(item.Existencia > 0)
                     {
-                        Console.WriteLine("ID: {0}", item.getId());
-                        Console.WriteLine("Nombre: {0}", item.getNombre());
-                        Console.WriteLine("Precio: ${0}", item.getPrecio());
-                        Console.WriteLine("Existencia: {0}", item.getExistencia());
+                        Console.WriteLine("ID: {0}", item.idProducto);
+                        Console.WriteLine("Nombre: {0}", item.Nombre);
+                        Console.WriteLine("Precio: ${0}", item.Precio);
+                        Console.WriteLine("Existencia: {0}", item.Existencia);
                         Console.WriteLine();
                     }
                 }
@@ -149,7 +149,7 @@ namespace ProyectoPuntoVenta
                 Console.Write("Ingrese el ID del producto que desea comprar: ");
                 string idProducto = Console.ReadLine();
 
-                Producto productoSeleccionado = productoStock.Find(p => p.getId().ToString() == idProducto);
+                Producto productoSeleccionado = productoStock.Find(p => p.idProducto.ToString() == idProducto);
 
                 if (productoSeleccionado == null)
                 {
@@ -161,7 +161,7 @@ namespace ProyectoPuntoVenta
                 Console.Write("Ingrese la cantidad de productos que desea comprar: ");
                 int cantidad = int.Parse(Console.ReadLine());
 
-                if (cantidad > productoSeleccionado.getExistencia())
+                if (cantidad > productoSeleccionado.Existencia)
                 {
                     Console.WriteLine("La cantidad ingresada es mayor a la cantidad disponible del producto. Presione cualquier tecla para continuar");
                     Console.ReadKey();
@@ -169,14 +169,14 @@ namespace ProyectoPuntoVenta
                 }
                 else
                 {
-                    decimal precioTotal = productoSeleccionado.getPrecio() * cantidad;
+                    decimal precioTotal = productoSeleccionado.Precio * cantidad;
                     
-                    Producto productoVendido = new Producto(productoSeleccionado.getId(), productoSeleccionado.getNombre(), cantidad, precioTotal);
+                    Producto productoVendido = new Producto(productoSeleccionado.idProducto, productoSeleccionado.Nombre, cantidad, precioTotal);
 
                     carrito.Add(productoVendido);
 
                     carrito.Add(productoSeleccionado);
-                    productoSeleccionado.setExistencia(productoSeleccionado.getExistencia() - cantidad);
+                    productoSeleccionado.setExistencia(productoSeleccionado.Existencia - cantidad);
 
                     subtotal += precioTotal;
                 }
@@ -255,8 +255,8 @@ namespace ProyectoPuntoVenta
             {
                 if(item.getCantidad() > 0)
                 {
-                Console.WriteLine("ID: {0}", item.getId());
-                Console.WriteLine("Nombre: {0}", item.getNombre());
+                Console.WriteLine("ID: {0}", item.idProducto);
+                Console.WriteLine("Nombre: {0}", item.Nombre);
                 Console.WriteLine("Cantidad: {0}", item.getCantidad());
                 Console.WriteLine("Total: ${0}", item.getTotal());
                 Console.WriteLine();

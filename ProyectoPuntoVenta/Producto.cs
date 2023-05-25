@@ -21,17 +21,18 @@ namespace ProyectoPuntoVenta
 
         }
 
-        public Producto(int id_producto, string nombre, decimal precio, int existencia) {
-            this.id_producto = id_producto;
-            this.nombre = nombre;
-            this.precio = precio;
-            this.existencia = existencia;
+        public Producto(int id_producto, string nombre, decimal precio, int existencia)
+        { 
+            idProducto = id_producto;
+            Nombre = nombre;
+            Precio = precio;
+            Existencia = existencia;
         }
 
         public Producto(int id_producto, string nombre, int cantidad, decimal total)
         {
-            this.id_producto = id_producto;
-            this.nombre = nombre;
+            idProducto = id_producto;
+            Nombre = nombre;
             this.cantidad = cantidad;
             this.total = total;
         }
@@ -39,31 +40,15 @@ namespace ProyectoPuntoVenta
 
         public Producto(string nombre, decimal precio, int existencia)
         {
-            this.nombre = nombre;
-            this.precio = precio;
-            this.existencia = existencia;
+            Nombre = nombre;
+            Precio = precio;
+            Existencia = existencia;
         }
 
-        public int getId()
-        {
-            return id_producto;
-        }
-
-        public string getNombre()
-        {
-            return nombre;
-        }
-
-        public decimal getPrecio()
-        {
-            return precio;
-        }
-
-        public int getExistencia()
-        {
-            return existencia;
-        }
-
+        public int idProducto { get; set; }
+        public string Nombre { get; set; }
+        public decimal Precio { get; set; }
+        public int Existencia { get; set; }
         public int getCantidad()
         {
             return cantidad;

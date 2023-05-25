@@ -20,7 +20,7 @@ namespace ProyectoPuntoVenta
 
         public List<Producto> getProductos(string filtro)
         {
-            string consulta = "SELECT * FROM productos WHERE existencia > 0";
+            string consulta = "SELECT * FROM productos";
 
             MySqlDataReader reader = null;
 
@@ -118,9 +118,9 @@ namespace ProyectoPuntoVenta
             try
             {
                 MySqlCommand comando = new MySqlCommand(consulta);
-                comando.Parameters.AddWithValue("@nombre", producto.getNombre());
-                comando.Parameters.AddWithValue("@precio", producto.getPrecio());
-                comando.Parameters.AddWithValue("@existencia", producto.getExistencia());
+                comando.Parameters.AddWithValue("@nombre", producto.Nombre);
+                comando.Parameters.AddWithValue("@precio", producto.Precio);
+                comando.Parameters.AddWithValue("@existencia", producto.Existencia);
                 comando.Connection = ConexionMySql.GetConnection();
                 comando.ExecuteNonQuery();
             }

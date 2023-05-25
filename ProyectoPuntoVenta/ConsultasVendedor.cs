@@ -117,8 +117,8 @@ namespace ProyectoPuntoVenta
                 comando.Parameters.AddWithValue("@ap_mat", vendedor.ApellidoMaterno);
                 comando.Parameters.AddWithValue("@email", vendedor.Email);
                 comando.Parameters.AddWithValue("@telefono", vendedor.Telefono);
-                comando.Parameters.AddWithValue("@sueldoBase", vendedor.getSueldoBase());
-                comando.Parameters.AddWithValue("@comision", vendedor.getComision());
+                comando.Parameters.AddWithValue("@sueldoBase", vendedor.SueldoBase);
+                comando.Parameters.AddWithValue("@comision", vendedor.Comision);
                 comando.Connection = ConexionMySql.GetConnection();
                 comando.ExecuteNonQuery();
             }
