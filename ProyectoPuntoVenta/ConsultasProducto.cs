@@ -104,10 +104,6 @@ namespace ProyectoPuntoVenta
 
             return productos;
         }
-
-
-        
-        
         public void agregarProductos(Producto producto)
         {
             string consulta = "INSERT INTO productos (nombre, precio, existencia)" +
@@ -121,44 +117,6 @@ namespace ProyectoPuntoVenta
                 comando.Parameters.AddWithValue("@nombre", producto.Nombre);
                 comando.Parameters.AddWithValue("@precio", producto.Precio);
                 comando.Parameters.AddWithValue("@existencia", producto.Existencia);
-                comando.Connection = ConexionMySql.GetConnection();
-                comando.ExecuteNonQuery();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
-
-        }
-
-        public void actualizarPrecioProducto(int id_producto, decimal nuevoPrecio)
-        {
-            string consulta = "UPDATE productos SET precio = @nuevoPrecio WHERE id_producto = @id_producto";
-
-            try
-            {
-                MySqlCommand comando = new MySqlCommand(consulta);
-                comando.Parameters.AddWithValue("@nuevoPrecio", nuevoPrecio);
-                comando.Parameters.AddWithValue("@id_producto", id_producto);
-                comando.Connection = ConexionMySql.GetConnection();
-                comando.ExecuteNonQuery();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        public void actualizarExistencia(int id_producto, int nuevaExistencia)
-        {
-            string consulta = "UPDATE productos SET existencia = @nuevaExistencia WHERE id_producto = @id_producto";
-
-            try
-            {
-                MySqlCommand comando = new MySqlCommand(consulta);
-                comando.Parameters.AddWithValue("@nuevaExistencia", nuevaExistencia);
-                comando.Parameters.AddWithValue("@id_producto", id_producto);
                 comando.Connection = ConexionMySql.GetConnection();
                 comando.ExecuteNonQuery();
             }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using iText.Layout;
 using MySql.Data.MySqlClient;
 
 namespace ProyectoPuntoVenta
@@ -52,7 +53,7 @@ namespace ProyectoPuntoVenta
             gpbx_mostrar.Show();
 
             ConsultasCliente consultas = new ConsultasCliente();
-            List<Cliente> listaClientes = consultas.getClientes("");
+            List<Cliente> listaClientes = consultas.GetClientes("");
 
             dataGridView1.DataSource = listaClientes;
 
@@ -72,7 +73,7 @@ namespace ProyectoPuntoVenta
                 gpbx_registrar.Hide();
 
                 ConsultasCliente consultas = new ConsultasCliente();
-                List<Cliente> listaClientes = consultas.getClientes("");
+                List<Cliente> listaClientes = consultas.GetClientes("");
 
                 dataGridView1.DataSource = listaClientes;
             }
@@ -84,7 +85,7 @@ namespace ProyectoPuntoVenta
             gpbx_mostrar_vendedor.Show();
 
             ConsultasVendedor consultasVendedor = new ConsultasVendedor();
-            List<Vendedor> listaVendedores = consultasVendedor.getVendedores("");
+            List<Vendedor> listaVendedores = consultasVendedor.GetVendedores("");
             dataGridView2.DataSource = listaVendedores;
 
             gpbx_registrar_vendedor.Hide();
@@ -98,7 +99,7 @@ namespace ProyectoPuntoVenta
                 gpbx_registrar_vendedor.Hide();
 
                 ConsultasVendedor consultasVendedor = new ConsultasVendedor();
-                List<Vendedor> listaVendedores = consultasVendedor.getVendedores("");
+                List<Vendedor> listaVendedores = consultasVendedor.GetVendedores("");
                 dataGridView2.DataSource = listaVendedores;
             }
             if (rdbtn_registrar_vendedor.Checked)
@@ -128,9 +129,9 @@ namespace ProyectoPuntoVenta
             //User usuario = listausers.FirstOrDefault(x => x.pUserName.Equals(txt_user.Text) && x.pPassWord.Equals(txt_pass.Text));
             //if (usuario != null)
             //{
-                menuStrip1.Show();
-                groupBox3.Hide();
-                groupBox7.Show();
+            menuStrip1.Show();
+            groupBox3.Hide();
+            groupBox7.Show();
 
             //}
             //if (usuario == null)
@@ -166,20 +167,10 @@ namespace ProyectoPuntoVenta
             gpbx_registrar_venta.Hide();
             gpbx_cons_ventas.Show();
 
-            MySqlConnection con = new MySqlConnection("server=localhost;database=mini_market_db;uid=root;pwd=Albertobc24;");
+            ConsultaVentas consultas = new ConsultaVentas();
+            List<Ventas> listaVentas = consultas.GetVentas("");
 
-            string query = "select * from ventas";
-
-            using (MySqlDataAdapter adpt = new MySqlDataAdapter(query, con))
-            {
-
-                DataSet dset = new DataSet();
-
-                adpt.Fill(dset);
-
-                dgv_ventas.DataSource = dset.Tables[0];
-
-            }
+            dgv_ventas.DataSource = listaVentas;
         }
 
         private void panel_productos_Paint(object sender, PaintEventArgs e)
@@ -195,20 +186,10 @@ namespace ProyectoPuntoVenta
             gpbx_cons_ventas.Show();
             gpbx_registrar_venta.Hide();
 
-            MySqlConnection con = new MySqlConnection("server=localhost;database=mini_market_db;uid=root;pwd=Albertobc24;");
+            ConsultaVentas consultas = new ConsultaVentas();
+            List<Ventas> listaVentas = consultas.GetVentas("");
 
-            string query = "select * from ventas";
-
-            using (MySqlDataAdapter adpt = new MySqlDataAdapter(query, con))
-            {
-
-                DataSet dset = new DataSet();
-
-                adpt.Fill(dset);
-
-                dgv_ventas.DataSource = dset.Tables[0];
-
-            }
+            dgv_ventas.DataSource = listaVentas;
 
         }
 
@@ -219,47 +200,35 @@ namespace ProyectoPuntoVenta
             gpbx_registrar_venta.Show();
             gpbx_cons_ventas.Hide();
 
-            MySqlConnection con = new MySqlConnection("server=localhost;database=mini_market_db;uid=root;pwd=Albertobc24;");
+            ConsultasProducto consultas = new ConsultasProducto();
+            List<Producto> listaProductos = consultas.getProductos("");
 
-            string query = "select id_producto, nombre, precio from productos";
+            ConsultasCliente consultasClt = new ConsultasCliente();
+            List<Cliente> listaClientes = consultasClt.GetClientes("");
 
-            using (MySqlDataAdapter adpt = new MySqlDataAdapter(query, con))
-            {
+            ConsultasVendedor consultasVdor = new ConsultasVendedor();
+            List<Vendedor> listaVendedores = consultasVdor.GetVendedores("");
 
-                DataSet dset = new DataSet();
+            dgv_info_productos.AutoGenerateColumns = false;
 
-                adpt.Fill(dset);
+            dgv_info_productos.Columns.Add("IdProducto", "Id Producto");
+            dgv_info_productos.Columns.Add("Nombre", "Nombre");
+            dgv_info_productos.Columns.Add("Precio", "Precio");
+            dgv_info_productos.Columns.Add("Existencia", "Existencia");
+            dgv_info_productos.Columns["IdProducto"].DataPropertyName = "IdProducto";
+            dgv_info_productos.Columns["Nombre"].DataPropertyName = "Nombre";
+            dgv_info_productos.Columns["Precio"].DataPropertyName = "Precio";
+            dgv_info_productos.Columns["Existencia"].DataPropertyName = "Existencia";
+            dgv_info_productos.DataSource = listaProductos;
 
-                dgv_info_productos.DataSource = dset.Tables[0];
+            cmb_producto.DataSource = listaProductos;
+            cmb_producto.DisplayMember = "IdProducto";
 
-            }
+            cmb_cliente.DataSource = listaClientes;
+            cmb_cliente.DisplayMember = "IdCliente";
 
-            con.Open();
-            MySqlCommand sc = new MySqlCommand("select id_producto from productos;", con);
-            MySqlDataReader reader = sc.ExecuteReader();
-            DataTable dt = new DataTable();
-            dt.Columns.Add("id_producto", typeof(string));
-            dt.Load(reader);
-            cmb_producto.ValueMember = "id_producto";
-            cmb_producto.DataSource = dt;
-
-            MySqlCommand scVendedor = new MySqlCommand("select id_vendedor from vendedores;", con);
-            MySqlDataReader readerVendedor = scVendedor.ExecuteReader();
-            DataTable dtVendedor = new DataTable();
-            dtVendedor.Columns.Add("Id_Vendedor", typeof(string));
-            dtVendedor.Load(readerVendedor);
-            cmb_vendedor.ValueMember = "Id_Vendedor";
-            cmb_vendedor.DataSource = dtVendedor;
-
-            MySqlCommand scCliente = new MySqlCommand("select id_cliente from clientes;", con);
-            MySqlDataReader readerCliente = scCliente.ExecuteReader();
-            DataTable dtCliente = new DataTable();
-            dtCliente.Columns.Add("Id_Cliente", typeof(string));
-            dtCliente.Load(readerCliente);
-            cmb_cliente.ValueMember = "Id_Cliente";
-            cmb_cliente.DataSource = dtCliente;
-
-
+            cmb_vendedor.DataSource = listaVendedores;
+            cmb_vendedor.DisplayMember = "IdCliente";
         }
 
         private void panel_ventas_Paint(object sender, PaintEventArgs e)
@@ -295,7 +264,7 @@ namespace ProyectoPuntoVenta
             bool cliente_existe;
             ConsultasCliente consultasClt = new ConsultasCliente();
 
-                cliente_existe = consultasClt.clienteExistente(txt_nombre.Text, txt_ap_pat.Text, txt_ap_mat.Text);
+            cliente_existe = consultasClt.ClienteExistente(txt_nombre.Text, txt_ap_pat.Text, txt_ap_mat.Text);
             if (todosLosTextBoxesValidos)
             {
                 if (cliente_existe)
@@ -310,10 +279,10 @@ namespace ProyectoPuntoVenta
                 else
                 {
                     Cliente nuevoCliente = new Cliente(txt_nombre.Text, txt_ap_pat.Text, txt_ap_mat.Text, txt_correo.Text, txt_telefono.Text);
-                    consultasClt.agregarCliente(nuevoCliente);
+                    consultasClt.AgregarCliente(nuevoCliente);
                     MessageBox.Show("Cliente registrado con exito");
                     gpbx_registrar.Hide();
-                    List<Cliente> listaClientes = consultasClt.getClientes("");
+                    List<Cliente> listaClientes = consultasClt.GetClientes("");
                     dataGridView1.DataSource = listaClientes;
                 }
             }
@@ -328,7 +297,7 @@ namespace ProyectoPuntoVenta
             {
                 ConsultasVendedor consultas = new ConsultasVendedor();
 
-                vendedor_existe = consultas.vendedorExistente(txt_nom_vendedor.Text, txt_appat_vendedor.Text, txt_apmat_vendedor.Text);
+                vendedor_existe = consultas.VendedorExistente(txt_nom_vendedor.Text, txt_appat_vendedor.Text, txt_apmat_vendedor.Text);
 
                 if (vendedor_existe)
                 {
@@ -343,7 +312,7 @@ namespace ProyectoPuntoVenta
 
                     Vendedor nuevoVendedor = new Vendedor(txt_nom_vendedor.Text, txt_appat_vendedor.Text, txt_apmat_vendedor.Text, txt_correo_vendedor.Text, txt_telefono_vendedor.Text, 5, Convert.ToDecimal(txt_sueldo_vendedor.Text));
 
-                    consultas.agregarVendedor(nuevoVendedor);
+                    consultas.AgregarVendedor(nuevoVendedor);
                     MessageBox.Show("Vendedor registrado con exito");
                 }
 
@@ -382,65 +351,97 @@ namespace ProyectoPuntoVenta
         }
 
 
-
+        private List<int> listaIdsProductos = new List<int>();
+        private List<int> listaCantidadProductos = new List<int>();
+        private decimal subtotal = 0;
         private void btn_agg_venta_Click(object sender, EventArgs e)
         {
-            string consulta = "SELECT precio FROM productos WHERE id_producto = " + cmb_producto.Text;
+            if (todosLosTextBoxesValidos)
+            {
+                int idProducto = Convert.ToInt32(cmb_producto.Text);
+                Console.WriteLine("Id: {0}", idProducto);
+                if (listaIdsProductos.Contains(idProducto))
+                {
+                    MessageBox.Show("El producto ya ha sido agregado.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                ConsultasProducto consultas = new ConsultasProducto();
+                List<Producto> producto = consultas.getProducto(Convert.ToString(idProducto));
 
-            MySqlDataReader reader = null;
-            BD ConexionMySql = new BD();
-            MySqlCommand comando = new MySqlCommand(consulta);
-            comando.Connection = ConexionMySql.GetConnection();
-            reader = comando.ExecuteReader();
-            reader.Read();
-            decimal precio = (decimal)reader["precio"];
+                Console.WriteLine("Producto: {0}", producto[0].Existencia);
+                int cantidadDisponible = producto[0].Existencia;
+                if (cantidadDisponible <= Convert.ToInt32(txt_cantidad.Text))
+                {
+                    MessageBox.Show("El producto no tiene suficiente cantidad disponible.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
-            lbl_producto.Text = cmb_producto.Text;
-            lbl_precio.Text = "$" + Convert.ToString(precio);
-            lbl_cant.Text = txt_cantidad.Text;
+                DataGridViewRow filaProducto = dgv_info_productos.Rows
+                   .Cast<DataGridViewRow>()
+                    .FirstOrDefault(r => Convert.ToInt32(r.Cells["IdProducto"].Value) == idProducto);
 
-            decimal subtotal = precio * (Convert.ToInt32(lbl_cant.Text));
-            string total = Convert.ToString(subtotal + (subtotal * (decimal)0.16));
+                if (filaProducto != null)
+                {
+                    if (Convert.ToInt32(txt_cantidad.Text) < cantidadDisponible)
+                    {
+                        filaProducto.Cells["Existencia"].Value = cantidadDisponible - Convert.ToInt32(txt_cantidad.Text);
+                        filaProducto.DefaultCellStyle.BackColor = Color.Lime;
+                    }
+                    else
+                    {
+                        MessageBox.Show("No se puede agregar más del producto seleccionado.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                }
+                listaIdsProductos.Add(idProducto);
+                listaCantidadProductos.Add(Convert.ToInt32(txt_cantidad.Text));
+                dgv_info_productos.Refresh();
 
-            lbl_subtotal.Text = Convert.ToString(subtotal);
-            lbl_total.Text = total;
 
+                decimal subtotal_individual = producto[0].Precio * (Convert.ToInt32(txt_cantidad.Text));
+                subtotal += subtotal_individual;
+                string total = Convert.ToString(subtotal + (subtotal * (decimal)0.16));
 
+                lbl_subtotal.Text = Convert.ToString(subtotal);
+                lbl_total.Text = total;
+                txt_cantidad.Text = string.Empty;
+            }
+            else
+            {
+                MessageBox.Show("Debe agregar la cantidad del producto seleccionado.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+            }
         }
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            try
+            ConsultaVentas consultaVentas = new ConsultaVentas();
+            consultaVentas.UltimaVenta();
+            int idVtaActual = consultaVentas.UltimaVenta() + 1;
+
+            if (listaIdsProductos.Any())
             {
-                ConsultaVentas consultaVentas = new ConsultaVentas();
+               Console.WriteLine("Contiene Informacion");
+               Ventas ventaNueva = new Ventas(Convert.ToInt32(cmb_cliente.Text), Convert.ToInt32(cmb_vendedor.Text), subtotal, Convert.ToDecimal(lbl_total.Text), DateTime.Now);
+               consultaVentas.AgregarVentas(ventaNueva);
 
-                int idCliente = Convert.ToInt32(cmb_cliente.Text);
-                int idVendedor = Convert.ToInt32(cmb_vendedor.Text);
-                int idProducto = Convert.ToInt32(cmb_producto.Text);
-                int cantidad = Convert.ToInt32(txt_cantidad.Text);
-                decimal subtotal = Convert.ToDecimal(lbl_subtotal.Text);
-                decimal total = Convert.ToDecimal(lbl_total.Text);
-                DateTime fechaVenta = DateTime.Now;
+                for(var i = 0; i < listaIdsProductos.Count; i++)
+                {
+                    var id_producto = listaIdsProductos[i];
+                    var cantidad = listaCantidadProductos[i];
+                    consultaVentas.AgregarDetalle(id_producto, idVtaActual, cantidad);
+                }
 
-
-                Ventas nuevaVenta = new Ventas(idCliente, idVendedor, idProducto, cantidad, subtotal, total, fechaVenta);
-                consultaVentas.agregarVentas(nuevaVenta);
-
-                MessageBox.Show("Venta registrada con exito");
-
-                txt_cantidad.Clear();
-                lbl_precio.Text = "-";
-                lbl_cant.Text = "-";
-                lbl_producto.Text = "-";
-                lbl_subtotal.Text = "";
-                lbl_total.Text = "";
-
+                MessageBox.Show("Venta guardada correctamente.", "Registro Exitoso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LimpiarDatos();
+                gpbx_cons_ventas.Show();
+                gpbx_registrar_venta.Hide();
             }
-            catch (Exception)
+            else
             {
-
-                MessageBox.Show("La venta no pudo ser registrada");
+                MessageBox.Show("Se debe agregar almenos un producto.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+
         }
 
         private void gpbx_cons_ventas_Enter(object sender, EventArgs e)
@@ -508,13 +509,13 @@ namespace ProyectoPuntoVenta
         private void txt_nombre_prod_Validated(object sender, EventArgs e)
         {
             TextBox textBox = (TextBox)sender;
-            todosLosTextBoxesValidos =  ValidarTextBox(textBox, "alfa");
+            todosLosTextBoxesValidos = ValidarTextBox(textBox, "alfa");
         }
 
         private void txt_precio_prod_Validated(object sender, EventArgs e)
         {
             TextBox textBox = (TextBox)sender;
-            todosLosTextBoxesValidos =  ValidarTextBox(textBox, "num");
+            todosLosTextBoxesValidos = ValidarTextBox(textBox, "num");
         }
 
         private void txt_existencia_prod_Validated(object sender, EventArgs e)
@@ -551,6 +552,55 @@ namespace ProyectoPuntoVenta
         {
             TextBox textBox = (TextBox)sender;
             todosLosTextBoxesValidos = ValidarTextBox(textBox, "num");
+        }
+
+        private void groupBox6_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txt_cantidad_Validating(object sender, CancelEventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            todosLosTextBoxesValidos = ValidarTextBox(textBox, "num");
+        }
+
+        private void cmb_cliente_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            LimpiarDatos();
+        }
+        private void LimpiarDatos()
+        {
+            lbl_subtotal.Text = string.Empty;
+            lbl_total.Text = string.Empty;
+            txt_cantidad.Text = string.Empty;
+            listaCantidadProductos.Clear();
+            listaIdsProductos.Clear();
+            ConsultasProducto consultas = new ConsultasProducto();
+            List<Producto> listaProductos = consultas.getProductos("");
+
+            dgv_info_productos.AutoGenerateColumns = false;
+            dgv_info_productos.Columns.Add("IdProducto", "Id Producto");
+            dgv_info_productos.Columns.Add("Nombre", "Nombre");
+            dgv_info_productos.Columns.Add("Precio", "Precio");
+            dgv_info_productos.Columns.Add("Existencia", "Existencia");
+            dgv_info_productos.Columns["IdProducto"].DataPropertyName = "IdProducto";
+            dgv_info_productos.Columns["Nombre"].DataPropertyName = "Nombre";
+            dgv_info_productos.Columns["Precio"].DataPropertyName = "Precio";
+            dgv_info_productos.Columns["Existencia"].DataPropertyName = "Existencia";
+            dgv_info_productos.DataSource = listaProductos;
+        }
+
+        private void reporteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ventToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var document = Biblioteca1.utility.CreatePDF("D:\\demo.pdf");
+            Biblioteca1.utility.EncabezadoPDF(document, "Punto de Venta MiniMarket", "Reporte de Ventas");
+            document.Close();
         }
     }
 }

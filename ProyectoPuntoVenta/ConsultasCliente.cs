@@ -9,8 +9,8 @@ namespace ProyectoPuntoVenta
 {
     internal class ConsultasCliente
     {
-        private BD ConexionMySql;
-        private List<Cliente> clientes;
+        private readonly BD ConexionMySql;
+        private readonly List<Cliente> clientes;
 
         public ConsultasCliente()
         {
@@ -18,12 +18,9 @@ namespace ProyectoPuntoVenta
             clientes = new List<Cliente>();
         }
 
-        public List<Cliente> getClientes(string filtro)
+        public List<Cliente> GetClientes(string filtro)
         {
             string consulta = "SELECT * FROM clientes";
-
-            MySqlDataReader reader = null;
-
             try
             {
                 if (filtro != "")
@@ -33,11 +30,11 @@ namespace ProyectoPuntoVenta
                         " nombre LIKE '%" + filtro + "%' ;";
                 }
 
-                MySqlCommand comando = new MySqlCommand(consulta);
-                comando.Connection = ConexionMySql.GetConnection();
-                reader = comando.ExecuteReader();
-
-
+                MySqlCommand comando = new MySqlCommand(consulta)
+                {
+                    Connection = ConexionMySql.GetConnection()
+                };
+                MySqlDataReader reader = comando.ExecuteReader();
                 Cliente cliente = null;
 
                 while (reader.Read())
@@ -63,19 +60,16 @@ namespace ProyectoPuntoVenta
             return clientes;
         }
 
-        public List<Cliente> getCliente(string id)
+        public List<Cliente> GetCliente(string id)
         {
             string consulta = "SELECT * FROM clientes WHERE id_cliente = " + id;
-
-            MySqlDataReader reader = null;
-
             try
             {
-                MySqlCommand comando = new MySqlCommand(consulta);
-                comando.Connection = ConexionMySql.GetConnection();
-                reader = comando.ExecuteReader();
-
-
+                MySqlCommand comando = new MySqlCommand(consulta)
+                {
+                    Connection = ConexionMySql.GetConnection()
+                };
+                MySqlDataReader reader = comando.ExecuteReader();
                 Cliente cliente = null;
 
                 while (reader.Read())
@@ -101,14 +95,11 @@ namespace ProyectoPuntoVenta
             return clientes;
         }
 
-        public bool clienteExistente(string nombre, string ap_pat, string ap_mat)
+        public bool ClienteExistente(string nombre, string ap_pat, string ap_mat)
         {
 
             bool verificar;
             string consulta = "SELECT * FROM clientes";
-
-            MySqlDataReader reader = null;
-
             try
             {
                 if (nombre != "" || ap_pat != "" || ap_mat != "")
@@ -119,10 +110,11 @@ namespace ProyectoPuntoVenta
                         "ap_mat = '" + ap_mat + "' ;";
                 }
 
-                MySqlCommand comando = new MySqlCommand(consulta);
-                comando.Connection = ConexionMySql.GetConnection();
-                reader = comando.ExecuteReader();
-
+                MySqlCommand comando = new MySqlCommand(consulta)
+                {
+                    Connection = ConexionMySql.GetConnection()
+                };
+                MySqlDataReader reader = comando.ExecuteReader();
                 if (reader.HasRows)
                 {
                     verificar = true;
@@ -140,7 +132,7 @@ namespace ProyectoPuntoVenta
             return verificar;
         }
 
-        public void agregarCliente(Cliente cliente)
+        public void AgregarCliente(Cliente cliente)
         {
             string consulta = "INSERT INTO clientes (nombre, ap_pat, ap_mat, email, telefono) " +
                               "VALUES (@nombre, @ap_pat, @ap_mat, @email, @telefono)";
@@ -161,5 +153,6 @@ namespace ProyectoPuntoVenta
                 throw;
             }
         }
+
     }
 }

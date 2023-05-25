@@ -38,8 +38,6 @@ CREATE TABLE ventas (
   id_venta INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
   id_cliente INT,
   id_vendedor INT,
-  id_producto INT,
-  cantidad_producto INT,
   subtotal DECIMAL(30,2) NOT NULL,
   total DECIMAL(30,2) NOT NULL,
     fecha_venta DATETIME

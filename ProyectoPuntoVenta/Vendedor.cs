@@ -8,11 +8,6 @@ namespace ProyectoPuntoVenta
 {
     public class Vendedor : Cliente
     {
-        private int comision;
-        private decimal sueldoBase;
-
-        public Vendedor() { }
-
         public Vendedor(int idCliente, string nombre, string ap_pat, string ap_mat, string email, string telefono, int comision, decimal sueldoBase)
             : base(idCliente, nombre, ap_pat, ap_mat, email, telefono)
         {
@@ -21,23 +16,12 @@ namespace ProyectoPuntoVenta
         }
 
         public Vendedor(string nombre, string ap_pat, string ap_mat, string email, string telefono, int comision, decimal sueldoBase)
-            : base(nombre, ap_pat, ap_mat, email, telefono)
+          : base(nombre, ap_pat, ap_mat, email, telefono)
         {
             Comision = comision;
             SueldoBase = sueldoBase;
         }
-
         public int Comision { get; set; }
         public decimal SueldoBase { get; set; }
-
-        public void setComision(int comision)
-        {
-            this.comision = comision;
-        }
-
-        public void setSueldoBase(decimal sueldoBase)
-        {
-            this.sueldoBase = sueldoBase;
-        }
     }
 }

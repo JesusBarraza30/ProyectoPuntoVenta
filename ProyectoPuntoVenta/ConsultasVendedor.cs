@@ -9,8 +9,8 @@ namespace ProyectoPuntoVenta
 {
     internal class ConsultasVendedor
     {
-        private BD ConexionMySql;
-        private List<Vendedor> vendedores;
+        private readonly BD ConexionMySql;
+        private readonly List<Vendedor> vendedores;
 
         public ConsultasVendedor()
         {
@@ -18,12 +18,9 @@ namespace ProyectoPuntoVenta
             vendedores = new List<Vendedor>();
         }
 
-        public List<Vendedor> getVendedores(string filtro)
+        public List<Vendedor> GetVendedores(string filtro)
         {
             string consulta = "SELECT * FROM vendedores";
-
-            MySqlDataReader reader = null;
-
             try
             {
                 if (filtro != "")
@@ -33,11 +30,11 @@ namespace ProyectoPuntoVenta
                         " nombre LIKE '%" + filtro + "%' ;";
                 }
 
-                MySqlCommand comando = new MySqlCommand(consulta);
-                comando.Connection = ConexionMySql.GetConnection();
-                reader = comando.ExecuteReader();
-
-
+                MySqlCommand comando = new MySqlCommand(consulta)
+                {
+                    Connection = ConexionMySql.GetConnection()
+                };
+                MySqlDataReader reader = comando.ExecuteReader();
                 Vendedor vendedor = null;
 
                 while (reader.Read())
@@ -65,14 +62,11 @@ namespace ProyectoPuntoVenta
             return vendedores;
         }
 
-        public bool vendedorExistente(string nombre, string ap_pat, string ap_mat)
+        public bool VendedorExistente(string nombre, string ap_pat, string ap_mat)
         {
 
             bool verificar;
             string consulta = "SELECT * FROM vendedores";
-
-            MySqlDataReader reader = null;
-
             try
             {
                 if (nombre != "" || ap_pat != "" || ap_mat != "")
@@ -83,10 +77,11 @@ namespace ProyectoPuntoVenta
                         "ap_mat = '" + ap_mat + "' ;";
                 }
 
-                MySqlCommand comando = new MySqlCommand(consulta);
-                comando.Connection = ConexionMySql.GetConnection();
-                reader = comando.ExecuteReader();
-
+                MySqlCommand comando = new MySqlCommand(consulta)
+                {
+                    Connection = ConexionMySql.GetConnection()
+                };
+                MySqlDataReader reader = comando.ExecuteReader();
                 if (reader.HasRows)
                 {
                     verificar = true;
@@ -104,7 +99,7 @@ namespace ProyectoPuntoVenta
             return verificar;
         }
 
-        public void agregarVendedor(Vendedor vendedor)
+        public void AgregarVendedor(Vendedor vendedor)
         {
             string consulta = "INSERT INTO vendedores (nombre, ap_pat, ap_mat, email, telefono, sueldo_base, comision) " +
                               "VALUES (@nombre, @ap_pat, @ap_mat, @email, @telefono, @sueldoBase, @comision)";

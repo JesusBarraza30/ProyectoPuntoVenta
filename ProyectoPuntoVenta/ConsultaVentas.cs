@@ -9,28 +9,26 @@ namespace ProyectoPuntoVenta
 {
     internal class ConsultaVentas
     {
-        private BD ConexionMySql;
-        private List<Ventas> venta;
+        private readonly BD ConexionMySql;
+        private readonly List<Ventas> venta;
         public ConsultaVentas()
         {
             ConexionMySql = new BD();
             venta = new List<Ventas>();
         }
 
-        public void agregarVentas(Ventas venta)
+        public void AgregarVentas(Ventas venta)
         {
-            string consulta = "INSERT INTO ventas (id_cliente, id_vendedor, id_producto, cantidad_producto,  subtotal, total, fecha_venta)" +
-                                "VALUES (@id_cliente, @id_vendedor, @id_producto, @cantidad_producto, @subtotal, @total, @fecha)";
+            string consulta = "INSERT INTO ventas (id_cliente, id_vendedor,  subtotal, total, fecha_venta)" +
+                                "VALUES (@id_cliente, @id_vendedor, @subtotal, @total, @fecha)";
             try
             {
                 MySqlCommand comando = new MySqlCommand(consulta);
-                comando.Parameters.AddWithValue("@id_cliente", venta.getIdCliente());
-                comando.Parameters.AddWithValue("@id_vendedor", venta.getIdVendedor());
-                comando.Parameters.AddWithValue("@id_producto", venta.getIdProd());
-                comando.Parameters.AddWithValue("@cantidad_producto", venta.getCantidad());
-                comando.Parameters.AddWithValue("@subtotal", venta.getSubTotalVenta());
-                comando.Parameters.AddWithValue("@total", venta.getTotalVenta());
-                comando.Parameters.AddWithValue("@fecha", DateTime.Now);
+                comando.Parameters.AddWithValue("@id_cliente", venta.IdCliente);
+                comando.Parameters.AddWithValue("@id_vendedor", venta.IdVendedor);
+                comando.Parameters.AddWithValue("@subtotal", venta.Subtotal);
+                comando.Parameters.AddWithValue("@total", venta.Total);
+                comando.Parameters.AddWithValue("@fecha", venta.FechaVenta);
                 comando.Connection = ConexionMySql.GetConnection();
                 comando.ExecuteNonQuery();
             }
@@ -39,16 +37,18 @@ namespace ProyectoPuntoVenta
                 throw;
             }
         }
-        public int ultimaVenta()
+        public int UltimaVenta()
         {
             int idVenta = 0;
             string consulta = "SELECT id_venta FROM ventas ORDER BY id_venta DESC LIMIT 1;";
-            MySqlDataReader reader = null;
+            
             try
             {
-                MySqlCommand comando = new MySqlCommand(consulta);
-                comando.Connection = ConexionMySql.GetConnection();
-                reader = comando.ExecuteReader();
+                MySqlCommand comando = new MySqlCommand(consulta)
+                {
+                    Connection = ConexionMySql.GetConnection()
+                };
+                MySqlDataReader reader = comando.ExecuteReader();
 
                 while (reader.Read())
                 {
@@ -65,7 +65,7 @@ namespace ProyectoPuntoVenta
             return idVenta;
         }
 
-        public void agregarDetalle(int id_producto, int id_venta, int cantidad)
+        public void AgregarDetalle(int id_producto, int id_venta, int cantidad)
         {
             string consulta = "INSERT INTO detalle_ventas (id_producto, id_venta, cantidad)" +
                                 "VALUES (@id_producto, @id_venta, @cantidad)";
@@ -84,12 +84,9 @@ namespace ProyectoPuntoVenta
             }
         }
 
-      /*  public List<Ventas> getVentas(string filtro)
+        public List<Ventas> GetVentas(string filtro)
         {
             string consulta = "SELECT * FROM ventas";
-
-            MySqlDataReader reader = null;
-
             try
             {
                 if (filtro != "")
@@ -99,11 +96,11 @@ namespace ProyectoPuntoVenta
                         " id_cliente LIKE '%" + filtro + "%' ;";
                 }
 
-                MySqlCommand comando = new MySqlCommand(consulta);
-                comando.Connection = ConexionMySql.GetConnection();
-                reader = comando.ExecuteReader();
-
-
+                MySqlCommand comando = new MySqlCommand(consulta)
+                {
+                    Connection = ConexionMySql.GetConnection()
+                };
+                MySqlDataReader reader = comando.ExecuteReader();
                 Ventas ventan = null;
 
                 while (reader.Read())
@@ -111,11 +108,11 @@ namespace ProyectoPuntoVenta
                     int id_venta = (int)reader["id_venta"];
                     int id_cliente = (int)reader["id_cliente"];
                     int id_vendedor = (int)reader["id_vendedor"];
-                    DateTime fecha_venta = (DateTime)reader["fecha_venta"];
+                    DateTime fechaVenta = (DateTime)reader["fecha_venta"];
                     decimal subtotal = (decimal)reader["subtotal"];
                     decimal total = (decimal)reader["total"];
 
-                    ventan = new Ventas(id_venta, id_cliente, id_vendedor, fecha_venta, subtotal, total);
+                    ventan = new Ventas(id_venta, id_cliente, id_vendedor, subtotal, total, fechaVenta);
                     venta.Add(ventan);
                 }
 
@@ -127,7 +124,6 @@ namespace ProyectoPuntoVenta
             }
 
             return venta;
-        }*/
-
+        }
     }
 }
