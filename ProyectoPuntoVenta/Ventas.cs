@@ -33,13 +33,32 @@ namespace ProyectoPuntoVenta
             FechaVenta = fechaVenta;
         }
 
+        public Ventas(int idVenta, int idCliente, int idVendedor, decimal subtotal, decimal total, DateTime fechaVenta, int id_producto, int cantidad)
+        {
+            IdVenta = idVenta;
+            IdCliente = idCliente;
+            IdVendedor = idVendedor;
+            Subtotal = subtotal;
+            Total = total;
+            FechaVenta = fechaVenta;
+            iDProducto = id_producto;
+            Cantidad = cantidad;
+        }
+
+        public Ventas(int id_producto, int cantidad)
+        {
+            iDProducto = id_producto;
+            Cantidad = cantidad;
+        }
+
         public int IdVenta { get; set; }
         public int IdCliente { get; set; }
         public int IdVendedor { get; set; }
         public decimal Subtotal { get; set; }
         public decimal Total { get; set; }
         public DateTime FechaVenta { get; set; }
-
+        public int iDProducto { get; set; }
+        public int Cantidad { get; set; }
 
         public decimal GetTotalVenta()
         {

@@ -62,6 +62,44 @@ namespace ProyectoPuntoVenta
             return vendedores;
         }
 
+        public List<Vendedor> GetVendedor(string filtro)
+        {
+            string consulta = "SELECT * FROM vendedores where id_vendedor = " + filtro + ";";
+            try
+            {
+
+                MySqlCommand comando = new MySqlCommand(consulta)
+                {
+                    Connection = ConexionMySql.GetConnection()
+                };
+                MySqlDataReader reader = comando.ExecuteReader();
+                Vendedor vendedor = null;
+
+                while (reader.Read())
+                {
+                    int idCliente = (int)reader["id_vendedor"];
+                    string nombre = (string)reader["nombre"];
+                    string ap_pat = (string)reader["ap_pat"];
+                    string ap_mat = (string)reader["ap_mat"];
+                    string email = (string)reader["email"];
+                    string telefono = (string)reader["telefono"];
+                    decimal sueldoBase = (decimal)reader["sueldo_base"];
+                    int comision = (int)reader["comision"];
+
+                    vendedor = new Vendedor(idCliente, nombre, ap_pat, ap_mat, email, telefono, comision, sueldoBase);
+                    vendedores.Add(vendedor);
+                }
+
+                reader.Close();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return vendedores;
+        }
+
         public bool VendedorExistente(string nombre, string ap_pat, string ap_mat)
         {
 

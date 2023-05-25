@@ -8,7 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using iText.Layout;
+using iText.Layout.Element;
+using iText.Layout.Properties;
 using MySql.Data.MySqlClient;
+using PDFUtility;
 
 namespace ProyectoPuntoVenta
 {
@@ -598,9 +601,92 @@ namespace ProyectoPuntoVenta
 
         private void ventToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var document = Biblioteca1.utility.CreatePDF("D:\\demo.pdf");
-            Biblioteca1.utility.EncabezadoPDF(document, "Punto de Venta MiniMarket", "Reporte de Ventas");
+
+            var document = Utility.CreatePDF("C:\\Users\\santa\\OneDrive\\Documentos\\demo.pdf");
+            string[] encabezado = { "Producto", "Precio", "Cantidad", "Total por Producto" };
+            Utility.EncabezadoPDF(document, "Mini Market", "Reporte de Ventas");
+            var tabla = Utility.EncabezadoTabla(encabezado);
+            ConsultaVentas consultas = new ConsultaVentas();
+            List<Ventas> listaVentas = consultas.GetVentas("1");
+            int ventaId = 0;
+
+            foreach (var item in listaVentas)
+            {
+                ConsultasCliente consultaclt = new ConsultasCliente();
+                List<Cliente> lstClientes = consultaclt.GetCliente(item.IdCliente.ToString());
+                ConsultasVendedor consultavdr = new ConsultasVendedor();
+                List<Vendedor> lstVendedor = consultavdr.GetVendedor(item.IdVendedor.ToString());
+
+                ventaId = item.IdVenta;
+
+                Paragraph fechaVenta = NuevoParrafo("Fecha de Venta: " + item.FechaVenta.ToString(), "left");
+                Paragraph subtotal = NuevoParrafo("Subtotal: $" + item.Subtotal.ToString(), "left");
+                Paragraph total = NuevoParrafo("Total: $" + item.Total.ToString(), "left");
+                Paragraph venta = NuevoParrafo("No.Venta: " + item.IdVenta.ToString(), "left");
+
+                string nombre_cliente = lstClientes[0].Nombre + " " + lstClientes[0].ApellidoPaterno + " " + lstClientes[0].ApellidoMaterno;
+                string nombre_vendedor = lstVendedor[0].Nombre + " " + lstVendedor[0].ApellidoPaterno + " " + lstVendedor[0].ApellidoMaterno;
+
+                Paragraph cliente = NuevoParrafo("Cliente: " + nombre_cliente, "left");
+                Paragraph vendedor = NuevoParrafo("Vendedor: " + nombre_vendedor, "left");
+
+                Paragraph vacio = NuevoParrafo("", "center");
+
+                document.Add(fechaVenta);
+                document.Add(venta);
+                document.Add(vendedor);
+                document.Add(cliente);
+                document.Add(subtotal);
+                document.Add(total);
+                document.Add(vacio);
+            }
+
+            if (listaVentas.Count != 0)
+            {
+                List<Ventas> detalle = consultas.GetVentaDetalle(ventaId.ToString());
+                foreach (var item in detalle)
+                {
+                    if (item.iDProducto > 0)
+                    {
+                        ConsultasProducto csltProducto = new ConsultasProducto();
+                        List<Producto> lstProducto = csltProducto.getProducto(item.iDProducto.ToString());
+                        tabla.AddCell(lstProducto[0].Nombre.ToString()); 
+                        tabla.AddCell("$" + lstProducto[0].Precio.ToString());
+                        tabla.AddCell(item.Cantidad.ToString());
+                        var total_producto = lstProducto[0].Precio * item.Cantidad;
+                        tabla.AddCell("$" + total_producto.ToString());
+                    }
+
+            }
+        }
+
+            document.Add(tabla);
             document.Close();
+        }
+
+        private Paragraph NuevoParrafo(string texto, string aling)
+        {
+            Paragraph parrafo = new Paragraph(texto);
+            switch (aling)
+            {
+                case "left":
+                    parrafo.SetTextAlignment(TextAlignment.LEFT);
+                    break;
+                case "center":
+                    parrafo.SetTextAlignment(TextAlignment.CENTER);
+                    break;
+                case "right":
+                    parrafo.SetTextAlignment(TextAlignment.RIGHT);
+                    break;
+                // Si aling no coincide con ningún caso, se utiliza la alineación predeterminada (izquierda)
+                default:
+                    parrafo.SetTextAlignment(TextAlignment.LEFT);
+                    break;
+            }
+
+            parrafo.SetFontSize(10);
+
+            return parrafo;
         }
     }
 }

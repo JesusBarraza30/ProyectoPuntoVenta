@@ -92,8 +92,7 @@ namespace ProyectoPuntoVenta
                 if (filtro != "")
                 {
                     consulta += " WHERE " +
-                        "id_venta LIKE '%" + filtro + "%' OR " +
-                        " id_cliente LIKE '%" + filtro + "%' ;";
+                        "id_venta = " + filtro + ";";
                 }
 
                 MySqlCommand comando = new MySqlCommand(consulta)
@@ -113,6 +112,37 @@ namespace ProyectoPuntoVenta
                     decimal total = (decimal)reader["total"];
 
                     ventan = new Ventas(id_venta, id_cliente, id_vendedor, subtotal, total, fechaVenta);
+                    venta.Add(ventan);
+                }
+
+                reader.Close();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return venta;
+        }
+
+        public List<Ventas> GetVentaDetalle(string filtro)
+        {
+            string consulta = "SELECT * FROM detalle_ventas where id_venta = " + filtro + ";";
+            try
+            {
+                MySqlCommand comando = new MySqlCommand(consulta)
+                {
+                    Connection = ConexionMySql.GetConnection()
+                };
+                MySqlDataReader reader = comando.ExecuteReader();
+                Ventas ventan = null;
+
+                while (reader.Read())
+                {
+                    int id_producto = (int)reader["id_producto"];
+                    int cantidad = (int)reader["cantidad"];
+
+                    ventan = new Ventas(id_producto, cantidad);
                     venta.Add(ventan);
                 }
 
