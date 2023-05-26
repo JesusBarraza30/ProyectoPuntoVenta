@@ -125,5 +125,63 @@ namespace ProyectoPuntoVenta
                 throw;
             }
         }
+
+        public List<Producto> GetInventario()
+        {
+            string consulta = "SELECT P.*, COALESCE(DV.CANTIDAD, 0) AS 'vendidos' FROM PRODUCTOS " +
+                "P LEFT JOIN " +
+                "(SELECT id_producto, SUM(CANTIDAD) AS CANTIDAD FROM detalle_ventas GROUP BY id_producto) "+
+                "DV ON DV.id_producto = P.ID_PRODUCTO ORDER BY id_producto;";
+
+            MySqlDataReader reader = null;
+
+            try
+            {
+                MySqlCommand comando = new MySqlCommand(consulta);
+                comando.Connection = ConexionMySql.GetConnection();
+                reader = comando.ExecuteReader();
+
+
+                Producto producto = null;
+
+                while (reader.Read())
+                {
+                    int id_producto = (int)reader["id_producto"];
+                    string nombre = (string)reader["nombre"];
+                    int existencia = (int)reader["existencia"];
+                    decimal vendidos = (decimal)reader["vendidos"];
+                    producto = new Producto(id_producto, nombre, existencia, vendidos);
+
+                    productos.Add(producto);
+                }
+
+                reader.Close();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            return productos;
+        }
+
+        public void ActualizarExistencia(int id_producto, int cantidad)
+        {
+            string consulta = "UPDATE productos SET existencia = @cantidad WHERE id_producto = @id_producto";
+
+            try
+            {
+                MySqlCommand comando = new MySqlCommand(consulta);
+                comando.Parameters.AddWithValue("@cantidad", cantidad);
+                comando.Parameters.AddWithValue("@id_producto", id_producto);
+                comando.Connection = ConexionMySql.GetConnection();
+                comando.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Apitron.PDF.Rasterizer;
 using iText.Layout;
 using iText.Layout.Element;
 using iText.Layout.Properties;
@@ -35,6 +37,7 @@ namespace ProyectoPuntoVenta
             panel_productos.Hide();
             panel_ventas.Hide();
             groupBox7.Hide();
+            //pdfViewer1.Hide();
         }
 
         private void clienteToolStripMenuItem_Click(object sender, EventArgs e)
@@ -357,6 +360,7 @@ namespace ProyectoPuntoVenta
         private List<int> listaIdsProductos = new List<int>();
         private List<int> listaCantidadProductos = new List<int>();
         private decimal subtotal = 0;
+        private List<int> existencia = new List<int>();
         private void btn_agg_venta_Click(object sender, EventArgs e)
         {
             if (todosLosTextBoxesValidos)
@@ -388,6 +392,7 @@ namespace ProyectoPuntoVenta
                     if (Convert.ToInt32(txt_cantidad.Text) < cantidadDisponible)
                     {
                         filaProducto.Cells["Existencia"].Value = cantidadDisponible - Convert.ToInt32(txt_cantidad.Text);
+                        existencia.Add(cantidadDisponible - Convert.ToInt32(txt_cantidad.Text));
                         filaProducto.DefaultCellStyle.BackColor = Color.Lime;
                     }
                     else
@@ -424,15 +429,17 @@ namespace ProyectoPuntoVenta
 
             if (listaIdsProductos.Any())
             {
-               Console.WriteLine("Contiene Informacion");
-               Ventas ventaNueva = new Ventas(Convert.ToInt32(cmb_cliente.Text), Convert.ToInt32(cmb_vendedor.Text), subtotal, Convert.ToDecimal(lbl_total.Text), DateTime.Now);
-               consultaVentas.AgregarVentas(ventaNueva);
+                Console.WriteLine("Contiene Informacion");
+                Ventas ventaNueva = new Ventas(Convert.ToInt32(cmb_cliente.Text), Convert.ToInt32(cmb_vendedor.Text), subtotal, Convert.ToDecimal(lbl_total.Text), DateTime.Now);
+                consultaVentas.AgregarVentas(ventaNueva);
 
-                for(var i = 0; i < listaIdsProductos.Count; i++)
+                for (var i = 0; i < listaIdsProductos.Count; i++)
                 {
                     var id_producto = listaIdsProductos[i];
                     var cantidad = listaCantidadProductos[i];
                     consultaVentas.AgregarDetalle(id_producto, idVtaActual, cantidad);
+                    ConsultasProducto producto = new ConsultasProducto();
+                    producto.ActualizarExistencia(id_producto, existencia[i]);
                 }
 
                 MessageBox.Show("Venta guardada correctamente.", "Registro Exitoso", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -601,92 +608,51 @@ namespace ProyectoPuntoVenta
 
         private void ventToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
-            var document = Utility.CreatePDF("C:\\Users\\santa\\OneDrive\\Documentos\\demo.pdf");
-            string[] encabezado = { "Producto", "Precio", "Cantidad", "Total por Producto" };
+            string path = "D:\\Documentos\\Reporte de Ventas.pdf";
+            var document = Utility.CreatePDF(path);
+            string[] encabezado = { "ID Venta", "ID Vendedor", "ID Cliente", "Fecha de Venta", "Subtotal", "Total", "ID Producto", "Cantidad" };
             Utility.EncabezadoPDF(document, "Mini Market", "Reporte de Ventas");
             var tabla = Utility.EncabezadoTabla(encabezado);
             ConsultaVentas consultas = new ConsultaVentas();
-            List<Ventas> listaVentas = consultas.GetVentas("1");
-            int ventaId = 0;
+            List<Ventas> listaVentas = consultas.GetVentaDetalle();
 
             foreach (var item in listaVentas)
             {
-                ConsultasCliente consultaclt = new ConsultasCliente();
-                List<Cliente> lstClientes = consultaclt.GetCliente(item.IdCliente.ToString());
-                ConsultasVendedor consultavdr = new ConsultasVendedor();
-                List<Vendedor> lstVendedor = consultavdr.GetVendedor(item.IdVendedor.ToString());
-
-                ventaId = item.IdVenta;
-
-                Paragraph fechaVenta = NuevoParrafo("Fecha de Venta: " + item.FechaVenta.ToString(), "left");
-                Paragraph subtotal = NuevoParrafo("Subtotal: $" + item.Subtotal.ToString(), "left");
-                Paragraph total = NuevoParrafo("Total: $" + item.Total.ToString(), "left");
-                Paragraph venta = NuevoParrafo("No.Venta: " + item.IdVenta.ToString(), "left");
-
-                string nombre_cliente = lstClientes[0].Nombre + " " + lstClientes[0].ApellidoPaterno + " " + lstClientes[0].ApellidoMaterno;
-                string nombre_vendedor = lstVendedor[0].Nombre + " " + lstVendedor[0].ApellidoPaterno + " " + lstVendedor[0].ApellidoMaterno;
-
-                Paragraph cliente = NuevoParrafo("Cliente: " + nombre_cliente, "left");
-                Paragraph vendedor = NuevoParrafo("Vendedor: " + nombre_vendedor, "left");
-
-                Paragraph vacio = NuevoParrafo("", "center");
-
-                document.Add(fechaVenta);
-                document.Add(venta);
-                document.Add(vendedor);
-                document.Add(cliente);
-                document.Add(subtotal);
-                document.Add(total);
-                document.Add(vacio);
+                tabla.AddCell(item.IdVenta.ToString());
+                tabla.AddCell(item.IdVendedor.ToString());
+                tabla.AddCell(item.IdCliente.ToString());
+                tabla.AddCell(item.FechaVenta.ToString());
+                tabla.AddCell(item.Subtotal.ToString());
+                tabla.AddCell(item.Total.ToString());
+                tabla.AddCell(item.iDProducto.ToString());
+                tabla.AddCell(item.Cantidad.ToString());
             }
-
-            if (listaVentas.Count != 0)
-            {
-                List<Ventas> detalle = consultas.GetVentaDetalle(ventaId.ToString());
-                foreach (var item in detalle)
-                {
-                    if (item.iDProducto > 0)
-                    {
-                        ConsultasProducto csltProducto = new ConsultasProducto();
-                        List<Producto> lstProducto = csltProducto.getProducto(item.iDProducto.ToString());
-                        tabla.AddCell(lstProducto[0].Nombre.ToString()); 
-                        tabla.AddCell("$" + lstProducto[0].Precio.ToString());
-                        tabla.AddCell(item.Cantidad.ToString());
-                        var total_producto = lstProducto[0].Precio * item.Cantidad;
-                        tabla.AddCell("$" + total_producto.ToString());
-                    }
-
-            }
-        }
-
             document.Add(tabla);
             document.Close();
+
+            Form2 form2 = new Form2();
+            form2._path = path;
+            form2.Show();
         }
 
-        private Paragraph NuevoParrafo(string texto, string aling)
+        private void inventarioToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Paragraph parrafo = new Paragraph(texto);
-            switch (aling)
+            var document = Utility.CreatePDF("D:\\Documentos\\Inventario de Productos.pdf");
+            string[] encabezado = { "ID Producto", "Nombre", "Existencia", "Cantidad Vendidos" };
+            Utility.EncabezadoPDF(document, "Mini Market", "Inventario de Productos");
+            var tabla = Utility.EncabezadoTabla(encabezado);
+            ConsultasProducto consultas = new ConsultasProducto();
+            List<Producto> listaProductos = consultas.GetInventario();
+
+            foreach (var item in listaProductos)
             {
-                case "left":
-                    parrafo.SetTextAlignment(TextAlignment.LEFT);
-                    break;
-                case "center":
-                    parrafo.SetTextAlignment(TextAlignment.CENTER);
-                    break;
-                case "right":
-                    parrafo.SetTextAlignment(TextAlignment.RIGHT);
-                    break;
-                // Si aling no coincide con ningún caso, se utiliza la alineación predeterminada (izquierda)
-                default:
-                    parrafo.SetTextAlignment(TextAlignment.LEFT);
-                    break;
+                tabla.AddCell(item.IdProducto.ToString());
+                tabla.AddCell(item.Nombre.ToString());
+                tabla.AddCell(item.Existencia.ToString());
+                tabla.AddCell(item.Cantidad.ToString());
             }
-
-            parrafo.SetFontSize(10);
-
-            return parrafo;
+            document.Add(tabla);
+            document.Close();
         }
     }
 }

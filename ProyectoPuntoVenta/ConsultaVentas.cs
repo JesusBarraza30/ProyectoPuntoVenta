@@ -125,9 +125,9 @@ namespace ProyectoPuntoVenta
             return venta;
         }
 
-        public List<Ventas> GetVentaDetalle(string filtro)
+        public List<Ventas> GetVentaDetalle()
         {
-            string consulta = "SELECT * FROM detalle_ventas where id_venta = " + filtro + ";";
+            string consulta = "SELECT * FROM ventas v inner join detalle_ventas dv on dv.id_venta = v.id_venta;";
             try
             {
                 MySqlCommand comando = new MySqlCommand(consulta)
@@ -139,10 +139,16 @@ namespace ProyectoPuntoVenta
 
                 while (reader.Read())
                 {
+                    int id_venta = (int)reader["id_venta"];
+                    int id_cliente = (int)reader["id_cliente"];
+                    int id_vendedor = (int)reader["id_vendedor"];
+                    DateTime fechaVenta = (DateTime)reader["fecha_venta"];
+                    decimal subtotal = (decimal)reader["subtotal"];
+                    decimal total = (decimal)reader["total"];
                     int id_producto = (int)reader["id_producto"];
                     int cantidad = (int)reader["cantidad"];
-
-                    ventan = new Ventas(id_producto, cantidad);
+                    
+                    ventan = new Ventas(id_venta, id_cliente, id_vendedor, subtotal, total, fechaVenta, id_producto, cantidad);
                     venta.Add(ventan);
                 }
 
