@@ -637,7 +637,8 @@ namespace ProyectoPuntoVenta
 
         private void inventarioToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var document = Utility.CreatePDF("D:\\Documentos\\Inventario de Productos.pdf");
+            string path = "D:\\Documentos\\Inventario de Productos.pdf";
+            var document = Utility.CreatePDF(path);
             string[] encabezado = { "ID Producto", "Nombre", "Existencia", "Cantidad Vendidos" };
             Utility.EncabezadoPDF(document, "Mini Market", "Inventario de Productos");
             var tabla = Utility.EncabezadoTabla(encabezado);
@@ -653,6 +654,10 @@ namespace ProyectoPuntoVenta
             }
             document.Add(tabla);
             document.Close();
+
+            Form2 form2 = new Form2();
+            form2._path = path;
+            form2.Show();
         }
     }
 }
